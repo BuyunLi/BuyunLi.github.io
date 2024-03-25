@@ -7,7 +7,7 @@ redirect_from:
   - /about.html
 ---
 
-I am an Ph.D. Candidate of Operations and Decision Technologies at the [Kelley School of Business](https://kelley.iu.edu/). Prior to joining Kelley, I spent 3 years as Master of Science at [S.C. Johnson College of Business](https://business.cornell.edu/) at Cornell University. Previously I obtained Bachelor of Science in Business and Economecis from [Univeristy of Queensland](https://bel.uq.edu.au/). 
+I am an Ph.D. Candidate of Operations and Decision Technologies at the [Kelley School of Business](https://kelley.iu.edu/). Prior to joining Kelley, I spent 3 years as Master of Science in [S.C. Johnson College of Business](https://business.cornell.edu/) at Cornell University. Previously I obtained Bachelor of Science in Business and Economecis from [Univeristy of Queensland](https://bel.uq.edu.au/). 
 
 My research is focused on both data-driven projects to solve real operational problems in healthcare operations and data driven analytics to facilitate smarter, efficient, and equitable decison-making in healthcare and service operations.
 
