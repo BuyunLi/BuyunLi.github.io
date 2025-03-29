@@ -1,0 +1,16 @@
+<div class="publication-entry">
+  <h3>{{ post.title }}</h3>
+  {% if post.status == "under_review" %}
+    <p><strong>Under Review</strong> at {{ post.venue }}</p>
+  {% else %}
+    <p><strong>Published</strong> at {{ post.venue }}</p>
+  {% endif %}
+  <p>{{ post.year }}</p>
+  {% if post.authors %}
+    <p>Authors: {{ post.authors }}</p>
+  {% endif %}
+  {% if post.abstract %}
+    <p>{{ post.abstract }}</p>
+  {% endif %}
+</div>
+<hr>
