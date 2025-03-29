@@ -1,13 +1,9 @@
 ---
-layout: archive
-title: "Publications"
+title: "Papers & Projects"
 permalink: /publications/
-author_profile: true
+layout: archive
 ---
 
-
-{% include base_path %}
-
-{% for post in site.publications reversed %}
-  {% include archive-single.html %}
+{% for post in site.publications %}
+  {% include custom_publication_entry.html %}
 {% endfor %}
