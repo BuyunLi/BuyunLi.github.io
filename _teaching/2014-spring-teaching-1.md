@@ -1,5 +1,5 @@
 ---
-title: "BUS-K303 Technology \& Business Analytics "
+title: "BUS-K303 Technology & Business Analytics "
 collection: teaching
 type: "Undergraduate course"
 permalink: /teaching/2014-spring-teaching-1
