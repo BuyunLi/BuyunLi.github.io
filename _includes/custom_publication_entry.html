@@ -2,6 +2,8 @@
   <h3>{{ post.title }}</h3>
   {% if post.status == "under_review" %}
     <p><strong>Under Review</strong> at {{ post.venue }}</p>
+  {% elsif post.status == "in_preparation" %}
+    <p><strong>In Preparation</strong> for {{ post.venue }}</p>
   {% else %}
     <p><strong>Published</strong> at {{ post.venue }}</p>
   {% endif %}
@@ -11,6 +13,9 @@
   {% endif %}
   {% if post.abstract %}
     <p>{{ post.abstract }}</p>
+  {% endif %}
+  {% if post.pdf_link %}
+    <p><a href="{{ post.pdf_link }}" target="_blank">View PDF</a></p>
   {% endif %}
 </div>
 <hr>
