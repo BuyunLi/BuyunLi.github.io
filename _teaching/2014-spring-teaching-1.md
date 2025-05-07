@@ -1,20 +1,18 @@
 ---
-title: "Teaching experience 1"
+title: "BUS-K303 Technology \& Business Analytics "
 collection: teaching
 type: "Undergraduate course"
 permalink: /teaching/2014-spring-teaching-1
-venue: "University 1, Department"
+venue: "Indiana University"
 date: 2014-01-01
-location: "City, Country"
+location: "Bloomington, USA"
 ---
 
-This is a description of a teaching experience. You can use markdown like any other post.
+Designed the course material, assignments, exams, and reading list along with the Canvas interface. Organized
+TA and Peer Tutor orientation and task assignment.
 
-Heading 1
+Course Organization
 ======
 
-Heading 2
-======
-
-Heading 3
+Evaluation
 ======
