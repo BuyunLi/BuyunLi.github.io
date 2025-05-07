@@ -1,20 +1,13 @@
 ---
-title: "Teaching experience 2"
+title: "HADM 6070: Hospitality Operations and Consulting"
 collection: teaching
 type: "Workshop"
 permalink: /teaching/2015-spring-teaching-1
-venue: "University 1, Department"
-date: 2015-01-01
-location: "City, Country"
+venue: "Cornell University, SC Johnson College of Business"
+date: 2018-08-22
+location: "Ithaca, USA"
 ---
 
-This is a description of a teaching experience. You can use markdown like any other post.
-
-Heading 1
+Evaluation:
 ======
-
-Heading 2
-======
-
-Heading 3
-======
+8.9/10 for overall Teaching Assistant evaluation
