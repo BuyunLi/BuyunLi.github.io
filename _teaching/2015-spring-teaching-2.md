@@ -7,6 +7,7 @@ venue: "Cornell University, SC Johnson College of Business"
 date: 2018-08-22
 location: "Ithaca, USA"
 ---
+Teaching assistant for MBA classes. 
 
 Evaluation:
 ======
