@@ -1,6 +1,12 @@
-layout: redirected
+---
+title: "CV"
 permalink: /cv/
-title: CV
-nav: true
-nav_order: 4
-redirect_to: /files/Buyun Li_CV.pdf
+---
+
+<!-- adjust width/height as you like -->
+<embed
+  src="{{ site.baseurl }}/files/CV.pdf"
+  type="application/pdf"
+  width="100%"
+  height="800px"
+>
