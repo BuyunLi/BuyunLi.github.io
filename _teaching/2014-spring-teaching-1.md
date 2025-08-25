@@ -8,12 +8,9 @@ date: 2023-08-27- Present
 location: "Bloomington, USA"
 ---
 
-Designed the course material, assignments, exams, and reading list along with the Canvas interface. Organized
-TA and Peer Tutor orientation and task assignment.
-
 Course Organization
 ======
-Designed the course material, assignments, exams and reading list along with the Canvas interface. Organized
+Refined the course material, assignments, exams and reading list along with the Canvas interface. Organized
 TA and Peer Tutor orientation and task assignment.
 
 Evaluation
