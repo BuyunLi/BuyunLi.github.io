@@ -17,3 +17,41 @@
 .archive .archive__item:hover {
   background: rgba(0,0,0,0.015);
 }
+
+/* Two-column layout: content + right TOC */
+.with-toc {
+  display: grid;
+  grid-template-columns: 1fr minmax(220px, 280px);
+  gap: 2rem;
+}
+
+/* Right-side, sticky TOC */
+.toc--right {
+  position: sticky;
+  top: 6rem;              /* adjust to your header height */
+  align-self: start;
+  max-height: calc(100vh - 6rem);
+  overflow: auto;
+  padding-left: 1rem;
+  border-left: 1px solid #e0e0e0;
+}
+.toc__title {
+  font-size: 1rem;
+  margin: 0.25rem 0 0.5rem;
+}
+.toc__list {
+  margin: 0;
+  padding-left: 1rem;
+  list-style: decimal;
+}
+.toc__list a {
+  text-decoration: none;
+}
+.toc__list a:hover {
+  text-decoration: underline;
+}
+
+/* Smooth scrolling (nice touch) */
+html {
+  scroll-behavior: smooth;
+}
