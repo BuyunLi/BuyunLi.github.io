@@ -1,7 +1,7 @@
 /* --- Layout: three columns (sidebar | content | right TOC) --- */
 #main.with-toc {
   display: grid;
-  grid-template-columns: minmax(240px, 320px) 1fr minmax(220px, 280px);
+  grid-template-columns: minmax(240px, 320px) 1fr minmax(260px, 360px); /* wider TOC */
   gap: 2rem;
   align-items: start;
 }
@@ -10,23 +10,19 @@
 #main.with-toc > .toc--right {
   grid-column: 3;
   position: sticky;
-  top: 6rem; /* adjust if your header height differs */
+  top: 6rem;
   max-height: calc(100vh - 6rem);
   overflow: auto;
   padding-left: 1rem;
   border-left: 1px solid #e0e0e0;
 }
 
-/* Mobile: stack */
+/* Mobile: stack layout */
 @media (max-width: 980px) {
-  #main.with-toc {
-    grid-template-columns: 1fr;
-  }
+  #main.with-toc { grid-template-columns: 1fr; }
   #main.with-toc > .sidebar,
   #main.with-toc > .archive,
-  #main.with-toc > .toc--right {
-    grid-column: 1;
-  }
+  #main.with-toc > .toc--right { grid-column: 1; }
   #main.with-toc > .toc--right {
     border-left: 0;
     border-top: 1px solid #e0e0e0;
@@ -38,15 +34,41 @@
 /* Smooth scrolling for TOC links */
 html { scroll-behavior: smooth; }
 
+/* --- TOC styles --- */
+.toc--right, .toc__title, .toc__list, .toc__list a {
+  text-transform: none !important; /* no ALL CAPS */
+}
+.toc__title { font-size: 1rem; margin: 0.25rem 0 0.5rem; }
+.toc__list { margin: 0; padding-left: 1rem; list-style: decimal; }
+.toc__list a { text-decoration: none; }
+.toc__list a:hover { text-decoration: underline; }
+
 /* --- Publication item styling --- */
 .archive .archive__item {
-  border-bottom: 2px solid #cfd8dc; /* clearer separator */
+  border-bottom: 2px solid #cfd8dc;
   padding-bottom: 1rem;
   margin-bottom: 1.25rem;
 }
 .archive .archive__item:last-child { border-bottom: 0; }
 
-/* Footer row (status + links) */
+/* Status pill */
+.pub__status {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.18em 0.6em;
+  border-radius: 999px;
+  line-height: 1;
+  background: #f1f3f5;
+  color: #333;
+  border: 1px solid #d0d5da;
+}
+.archive__item-title .pub__status--inline {
+  margin-left: 0.5rem;
+  vertical-align: middle;
+}
+
+/* Footer (for Preprint link) */
 .pub__footer {
   margin-top: 0.5rem;
   display: flex;
@@ -54,35 +76,7 @@ html { scroll-behavior: smooth; }
   align-items: center;
   flex-wrap: wrap;
 }
-
-/* Status pill: unified neutral look */
-.pub__status {
-  display: inline-block;
-  font-size: 0.8rem;
-  font-weight: 600;
-  padding: 0.25em 0.75em;
-  border-radius: 999px;
-  line-height: 1;
-  background: #f1f3f5;
-  color: #333;
-  border: 1px solid #d0d5da;
-}
-
-/* Optional: slightly highlight positive end-states */
-.pub__status-positive {
-  background: #e8f5e9;
-  border-color: #c8e6c9;
-  color: #256029;
-}
-
-/* If you want Accepted/Published/In Press green, uncomment:
-.pub__status:has(:where()){} isn’t widely supported in older browsers.
-Instead, you can wrap those with an extra class in Liquid if desired.
-*/
-
-/* Preprint link */
 .pub__link {
-  font-size: 0.85rem;
   font-weight: 600;
   text-decoration: none;
   border-bottom: 1px solid transparent;
