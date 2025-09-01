@@ -2,6 +2,11 @@
 layout: default
 ---
 
+{% comment %}
+  Publications layout: renders only site.publications (no {{ content }})
+  Avoids duplicate rendering from page content.
+{% endcomment %}
+
 {% if page.header.overlay_color or page.header.overlay_image or page.header.image %}
   {% include page__hero.html %}
 {% endif %}
@@ -12,6 +17,8 @@ layout: default
   {% endunless %}
 {% endif %}
 
+{%- assign items = site.publications | sort: "year" | reverse -%}
+
 <div id="main" role="main" class="with-toc">
   {% include sidebar.html %}
 
@@ -20,17 +27,8 @@ layout: default
       <h1 class="page__title">{{ page.title }}</h1>
     {% endunless %}
 
-    {%- comment -%}
-    MAIN CONTENT
-    If your publications live in a collection (e.g., _publications),
-    this block renders them AND gives each item an in-page anchor id.
-    If you already have a custom loop in the page content, you can
-    keep {{ content }} and just add ids inside that loop instead (see notes below).
-    {%- endcomment -%}
-
-    {%- assign items = site.publications | sort: "year" | reverse -%}
-    {%- if items and items.size > 0 -%}
-      <div class="archive__content">
+    <div class="archive__content">
+      {%- if items and items.size > 0 -%}
         {%- for post in items -%}
           <article id="pub-{{ post.slug | slugify }}" class="archive__item">
             <h2 class="archive__item-title">
@@ -43,8 +41,8 @@ layout: default
 
             {%- if post.venue or post.year -%}
               <p class="archive__item-meta">
-                {%- if post.venue -%}{{ post.venue }}{%- endif -%}
-                {%- if post.venue and post.year -%}, {% endif -%}
+                {%- if post.venue -%}<em>{{ post.venue }}</em>{%- endif -%}
+                {%- if post.venue and post.year -%} · {%- endif -%}
                 {%- if post.year -%}{{ post.year }}{%- endif -%}
               </p>
             {%- endif -%}
@@ -53,19 +51,33 @@ layout: default
               <div class="archive__item-excerpt">{{ post.abstract }}</div>
             {%- endif -%}
 
-            {%- if post.link or post.paperurl -%}
-              <p class="archive__item-links">
-                {%- if post.paperurl -%}<a href="{{ post.paperurl }}">Paper</a>{%- endif -%}
-                {%- if post.link and post.paperurl -%} · {%- endif -%}
-                {%- if post.link -%}<a href="{{ post.link }}">Project</a>{%- endif -%}
-              </p>
-            {%- endif -%}
+            <div class="pub__footer">
+              {%- if post.status -%}
+                <span class="pub__status">
+                  {%- case post.status | downcase -%}
+                    {%- when "under_review" -%}Under Review
+                    {%- when "major_revision" -%}Major Revision
+                    {%- when "minor_revision" -%}Minor Revision
+                    {%- when "accepted" -%}Accepted
+                    {%- when "in_press" -%}In Press
+                    {%- when "published" -%}Published
+                    {%- when "draft" -%}Draft
+                    {%- else -%}{{ post.status | replace: "_"," " | capitalize }}
+                  {%- endcase -%}
+                </span>
+              {%- endif -%}
+
+              {%- if post.pdf_link -%}
+                <a class="pub__link" href="{{ post.pdf_link }}" target="_blank" rel="noopener">📄 Preprint</a>
+              {%- endif -%}
+            </div>
           </article>
         {%- endfor -%}
-      </div>
-    {%- else -%}
-      {{ content }}
-    {%- endif -%}
+      {%- else -%}
+        {# Fallback: only use page content if there are no collection items #}
+        {{ content }}
+      {%- endif -%}
+    </div>
   </div>
 
   <aside class="toc toc--right">
@@ -75,55 +87,7 @@ layout: default
         {%- for post in items -%}
           <li><a href="#pub-{{ post.slug | slugify }}">{{ post.title }}</a></li>
         {%- endfor -%}
-      {%- else -%}
-        {%- comment -%}
-        Fallback: if you kept {{ content }} and added ids manually,
-        you can also build this list in-page. Otherwise this TOC will be empty.
-        {%- endcomment -%}
       {%- endif -%}
     </ol>
   </aside>
 </div>
-
-{%- assign items = site.publications | sort: "year" | reverse -%}
-{%- for post in items -%}
-  <article id="pub-{{ post.slug | slugify }}" class="archive__item">
-    <h2 class="archive__item-title">{{ post.title }}</h2>
-
-    {%- if post.authors -%}
-      <p class="archive__item-meta">{{ post.authors }}</p>
-    {%- endif -%}
-
-    {%- if post.venue -%}
-      <p class="archive__item-meta"><em>{{ post.venue }}</em></p>
-    {%- endif -%}
-
-    {%- if post.abstract -%}
-      <div class="archive__item-excerpt">{{ post.abstract }}</div>
-    {%- endif -%}
-
-    <div class="pub__footer">
-      {% if post.status %}
-  <span class="pub__status">
-    {%- case post.status | downcase -%}
-      {%- when "under_review" -%}Under Review
-      {%- when "major_revision" -%}Major Revision
-      {%- when "minor_revision" -%}Minor Revision
-      {%- when "accepted" -%}Accepted
-      {%- when "in_press" -%}In Press
-      {%- when "published" -%}Published
-      {%- when "draft" -%}Draft
-      {%- else -%}{{ post.status | replace: "_"," " | capitalize }}
-    {%- endcase -%}
-  </span>
-{% endif %}
-
-      {%- if post.pdf_link -%}
-        <a class="pub__link" href="{{ post.pdf_link }}" target="_blank" rel="noopener">
-          📄 Preprint
-        </a>
-      {%- endif -%}
-    </div>
-  </article>
-{%- endfor -%}
-
