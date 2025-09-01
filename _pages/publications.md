@@ -1,9 +1,5 @@
 ---
-title: "Papers & Projects"
+layout: publications   # <— use the new layout
+title: "Publications"
 permalink: /publications/
-layout: archive
 ---
-
-{% for post in site.publications %}
-  {% include custom_publication_entry.html %}
-{% endfor %}
