@@ -1,0 +1,86 @@
+---
+layout: default
+---
+
+{% if page.header.overlay_color or page.header.overlay_image or page.header.image %}
+  {% include page__hero.html %}
+{% endif %}
+
+{% if page.url != "/" and site.breadcrumbs %}
+  {% unless paginator %}
+    {% include breadcrumbs.html %}
+  {% endunless %}
+{% endif %}
+
+<div id="main" role="main" class="with-toc">
+  {% include sidebar.html %}
+
+  <div class="archive">
+    {% unless page.header.overlay_color or page.header.overlay_image %}
+      <h1 class="page__title">{{ page.title }}</h1>
+    {% endunless %}
+
+    {%- comment -%}
+    MAIN CONTENT
+    If your publications live in a collection (e.g., _publications),
+    this block renders them AND gives each item an in-page anchor id.
+    If you already have a custom loop in the page content, you can
+    keep {{ content }} and just add ids inside that loop instead (see notes below).
+    {%- endcomment -%}
+
+    {%- assign items = site.publications | sort: "year" | reverse -%}
+    {%- if items and items.size > 0 -%}
+      <div class="archive__content">
+        {%- for post in items -%}
+          <article id="pub-{{ post.slug | slugify }}" class="archive__item">
+            <h2 class="archive__item-title">
+              {{ post.title }}
+            </h2>
+
+            {%- if post.authors -%}
+              <p class="archive__item-meta">{{ post.authors }}</p>
+            {%- endif -%}
+
+            {%- if post.venue or post.year -%}
+              <p class="archive__item-meta">
+                {%- if post.venue -%}{{ post.venue }}{%- endif -%}
+                {%- if post.venue and post.year -%}, {% endif -%}
+                {%- if post.year -%}{{ post.year }}{%- endif -%}
+              </p>
+            {%- endif -%}
+
+            {%- if post.abstract -%}
+              <div class="archive__item-excerpt">{{ post.abstract }}</div>
+            {%- endif -%}
+
+            {%- if post.link or post.paperurl -%}
+              <p class="archive__item-links">
+                {%- if post.paperurl -%}<a href="{{ post.paperurl }}">Paper</a>{%- endif -%}
+                {%- if post.link and post.paperurl -%} · {%- endif -%}
+                {%- if post.link -%}<a href="{{ post.link }}">Project</a>{%- endif -%}
+              </p>
+            {%- endif -%}
+          </article>
+        {%- endfor -%}
+      </div>
+    {%- else -%}
+      {{ content }}
+    {%- endif -%}
+  </div>
+
+  <aside class="toc toc--right">
+    <h2 class="toc__title">Publications</h2>
+    <ol class="toc__list">
+      {%- if items and items.size > 0 -%}
+        {%- for post in items -%}
+          <li><a href="#pub-{{ post.slug | slugify }}">{{ post.title }}</a></li>
+        {%- endfor -%}
+      {%- else -%}
+        {%- comment -%}
+        Fallback: if you kept {{ content }} and added ids manually,
+        you can also build this list in-page. Otherwise this TOC will be empty.
+        {%- endcomment -%}
+      {%- endif -%}
+    </ol>
+  </aside>
+</div>
