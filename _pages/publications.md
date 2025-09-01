@@ -1,5 +1,5 @@
 ---
 layout: publications   # <— use the new layout
-title: "Publications"
+title: "Research Papers"
 permalink: /publications/
 ---
