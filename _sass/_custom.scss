@@ -1,7 +1,7 @@
-/* --- Layout: three columns (sidebar | content | right TOC) --- */
+/* --- Grid: sidebar | main | slim right TOC --- */
 #main.with-toc {
   display: grid;
-  grid-template-columns: minmax(240px, 320px) 1fr minmax(280px, 380px); /* a bit wider TOC */
+  grid-template-columns: minmax(240px, 300px) 1fr minmax(190px, 230px); /* slimmer TOC */
   gap: 2rem;
   align-items: start;
 }
@@ -13,8 +13,11 @@
   top: 6rem;
   max-height: calc(100vh - 6rem);
   overflow: auto;
-  padding-left: 1rem;
+  padding-left: 0.75rem;             /* less padding so it hugs right */
   border-left: 1px solid #e0e0e0;
+  justify-self: end;                 /* keep TOC tight to the right edge */
+  width: 100%;
+  max-width: 230px;                  /* keep it narrow */
 }
 
 /* Mobile: stack */
@@ -28,29 +31,37 @@
     border-top: 1px solid #e0e0e0;
     margin-top: 1rem;
     padding-top: 1rem;
+    max-width: none;
   }
 }
 
 /* Smooth scrolling */
 html { scroll-behavior: smooth; }
 
-/* --- TOC styles: make titles normal case and smaller --- */
-.toc--right .toc__list a,
-.toc--right .toc__list .toc__title-text,
-.toc--right .toc__list .toc__status {
-  text-transform: none !important;  /* override uppercase */
-  font-size: 0.9rem;                 /* smaller font */
-  line-height: 1.3;
+/* --- TOC typography: smaller, not uppercased --- */
+.toc--right, .toc__title, .toc__section, .toc__list, .toc__list a,
+.toc__title-text, .toc__status {
+  text-transform: none !important;
+}
+.toc__title   { font-size: 0.95rem; margin: 0.25rem 0 0.5rem; }
+.toc__section { font-size: 0.85rem; margin: 0.75rem 0 0.25rem; opacity: 0.8; }
+.toc__list    { margin: 0; padding-left: 1rem; list-style: decimal; }
+.toc__list a  { display: inline-block; text-decoration: none; font-size: 0.85rem; line-height: 1.35; }
+.toc__list a:hover { text-decoration: underline; }
+.toc__title-text { font-weight: 600; }
+.toc__status     { font-weight: 500; opacity: 0.9; }
+
+/* --- Publication section heading --- */
+.pub__section {
+  margin: 1.75rem 0 0.75rem;
+  font-size: 1.15rem;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 0.25rem;
 }
 
-/* Even smaller on very wide lists */
-.toc--right .toc__list a {
-  display: inline-block;
-  margin-bottom: 0.4rem;
-}
-/* --- Publication item styling --- */
+/* --- Publication items & separators --- */
 .archive .archive__item {
-  border-bottom: 2px solid #cfd8dc; /* clearer separator */
+  border-bottom: 2px solid #cfd8dc;
   padding-bottom: 1rem;
   margin-bottom: 1.25rem;
 }
@@ -63,7 +74,7 @@ html { scroll-behavior: smooth; }
 .pub__year  { font-size: 0.95rem; color: #666; }
 .pub__dot   { color: #aaa; }
 
-/* Status pill (neutral look) */
+/* Status pill (neutral) */
 .pub__status {
   display: inline-block;
   font-size: 0.78rem;
@@ -76,7 +87,7 @@ html { scroll-behavior: smooth; }
   border: 1px solid #d0d5da;
 }
 
-/* Footer (for Preprint link) */
+/* Footer (preprint link) */
 .pub__footer {
   margin-top: 0.5rem;
   display: flex;
