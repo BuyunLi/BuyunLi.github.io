@@ -1,0 +1,19 @@
+/* Stronger, clearer separators for archive items */
+.archive .archive__item {
+  border-bottom: 2px solid #cfd8dc; /* thicker, higher-contrast */
+  padding-bottom: 1rem;
+  margin-bottom: 1.25rem;
+}
+.archive .archive__item:last-child {
+  border-bottom: 0;
+}
+
+/* Optional: slightly larger title for readability */
+.archive .archive__item-title {
+  margin-bottom: 0.35rem;
+}
+
+/* Optional: subtle hover to help scanning */
+.archive .archive__item:hover {
+  background: rgba(0,0,0,0.015);
+}
