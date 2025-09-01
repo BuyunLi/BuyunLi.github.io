@@ -97,3 +97,50 @@ html {
     padding-top: 1rem;
   }
 }
+
+/* Distinct separators for each publication item */
+.archive .archive__item {
+  border-bottom: 2px solid #cfd8dc;
+  padding-bottom: 1rem;
+  margin-bottom: 1.25rem;
+}
+.archive .archive__item:last-child { border-bottom: 0; }
+
+/* Footer row: status + links line up nicely */
+.pub__footer {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Status pill */
+.pub__status {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.25em 0.75em;
+  border-radius: 999px;   /* makes it pill-shaped */
+  line-height: 1;
+  background: #f1f3f5;    /* subtle gray background */
+  color: #333;
+  border: 1px solid #d0d5da;
+}
+
+/* Optionally, make accepted/published slightly highlighted */
+.pub__status:contains("Accepted"),
+.pub__status:contains("Published"),
+.pub__status:contains("In Press") {
+  background: #e8f5e9;
+  border-color: #c8e6c9;
+  color: #256029;
+}
+/* Preprint link: visible and consistent */
+.pub__link {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+.pub__link:hover { text-decoration: underline; }
