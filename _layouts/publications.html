@@ -25,34 +25,39 @@ layout: default
     <div class="archive__content">
       {%- if items and items.size > 0 -%}
         {%- for post in items -%}
+          {%- assign raw_status = post.status | downcase -%}
+          {%- capture status_label -%}
+            {%- case raw_status -%}
+              {%- when "under_review" -%}Under Review
+              {%- when "major_revision" -%}Major Revision
+              {%- when "minor_revision" -%}Minor Revision
+              {%- when "accepted" -%}Accepted
+              {%- when "in_press" -%}In Press
+              {%- when "published" -%}Published
+              {%- when "draft" -%}Draft
+              {%- else -%}{{ post.status | replace: "_"," " | capitalize }}
+            {%- endcase -%}
+          {%- endcapture -%}
+
           <article id="pub-{{ post.slug | slugify }}" class="archive__item">
-            <h2 class="archive__item-title">
-              {{ post.title }}
-              {%- if post.status -%}
-                <span class="pub__status pub__status--inline">
-                  {%- case post.status | downcase -%}
-                    {%- when "under_review" -%}Under Review
-                    {%- when "major_revision" -%}Major Revision
-                    {%- when "minor_revision" -%}Minor Revision
-                    {%- when "accepted" -%}Accepted
-                    {%- when "in_press" -%}In Press
-                    {%- when "published" -%}Published
-                    {%- when "draft" -%}Draft
-                    {%- else -%}{{ post.status | replace: "_"," " | capitalize }}
-                  {%- endcase -%}
-                </span>
-              {%- endif -%}
-            </h2>
+            <h2 class="archive__item-title">{{ post.title }}</h2>
 
             {%- if post.authors -%}
               <p class="archive__item-meta">{{ post.authors }}</p>
             {%- endif -%}
 
-            {%- if post.venue or post.year -%}
-              <p class="archive__item-meta">
-                {%- if post.venue -%}<em>{{ post.venue }}</em>{%- endif -%}
-                {%- if post.venue and post.year -%} · {%- endif -%}
-                {%- if post.year -%}{{ post.year }}{%- endif -%}
+            {%- if post.venue or post.year or post.status -%}
+              <p class="archive__item-meta pub__meta">
+                {%- if post.status -%}
+                  <span class="pub__status">{{ status_label | strip }}</span>
+                  <span class="pub__dash">&nbsp;—&nbsp;</span>
+                {%- endif -%}
+                {%- if post.venue -%}
+                  <span class="pub__venue"><em>{{ post.venue }}</em></span>
+                {%- endif -%}
+                {%- if post.year -%}
+                  <span class="pub__dot"> · </span><span class="pub__year">{{ post.year }}</span>
+                {%- endif -%}
               </p>
             {%- endif -%}
 
@@ -78,7 +83,27 @@ layout: default
     <ol class="toc__list">
       {%- if items and items.size > 0 -%}
         {%- for post in items -%}
-          <li><a href="#pub-{{ post.slug | slugify }}">{{ post.title }}</a></li>
+          {%- assign raw_status = post.status | downcase -%}
+          {%- capture status_label -%}
+            {%- case raw_status -%}
+              {%- when "under_review" -%}Under Review
+              {%- when "major_revision" -%}Major Revision
+              {%- when "minor_revision" -%}Minor Revision
+              {%- when "accepted" -%}Accepted
+              {%- when "in_press" -%}In Press
+              {%- when "published" -%}Published
+              {%- when "draft" -%}Draft
+              {%- else -%}{{ post.status | replace: "_"," " | capitalize }}
+            {%- endcase -%}
+          {%- endcapture -%}
+          <li>
+            <a href="#pub-{{ post.slug | slugify }}">
+              <span class="toc__title-text">{{ post.title }}</span>
+              {%- if post.status -%}
+                <span class="toc__status"> — {{ status_label | strip }}</span>
+              {%- endif -%}
+            </a>
+          </li>
         {%- endfor -%}
       {%- endif -%}
     </ol>
