@@ -55,3 +55,45 @@
 html {
   scroll-behavior: smooth;
 }
+/* Three-column layout: sidebar | content | right TOC */
+#main.with-toc {
+  display: grid;
+  grid-template-columns: minmax(240px, 320px) 1fr minmax(220px, 280px);
+  gap: 2rem;
+  align-items: start;
+}
+
+/* Map children to columns explicitly */
+#main.with-toc > .sidebar {        /* Minimal Mistakes sidebar include */
+  grid-column: 1;
+}
+#main.with-toc > .archive {        /* your main publications content */
+  grid-column: 2;
+}
+#main.with-toc > .toc--right {     /* the catalog/TOC aside */
+  grid-column: 3;
+  position: sticky;
+  top: 6rem;                        /* adjust for your header height */
+  max-height: calc(100vh - 6rem);
+  overflow: auto;
+  padding-left: 1rem;
+  border-left: 1px solid #e0e0e0;
+}
+
+/* Optional: mobile—stack everything, TOC below content */
+@media (max-width: 980px) {
+  #main.with-toc {
+    grid-template-columns: 1fr;
+  }
+  #main.with-toc > .sidebar,
+  #main.with-toc > .archive,
+  #main.with-toc > .toc--right {
+    grid-column: 1;
+  }
+  #main.with-toc > .toc--right {
+    border-left: 0;
+    border-top: 1px solid #e0e0e0;
+    margin-top: 1rem;
+    padding-top: 1rem;
+  }
+}
