@@ -103,19 +103,20 @@ layout: default
     {%- endif -%}
 
     <div class="pub__footer">
-      {%- if post.status -%}
-        <span class="pub__status pub__status--{{ post.status | downcase }}">
-          {%- case post.status | downcase -%}
-            {%- when "under_review" -%}Under Review
-            {%- when "revise_and_resubmit" -%}Revise & Resubmit
-            {%- when "accepted" -%}Accepted
-            {%- when "in_press" -%}In Press
-            {%- when "published" -%}Published
-            {%- when "draft" -%}Draft
-            {%- else -%}{{ post.status | replace: "_"," " | capitalize }}
-          {%- endcase -%}
-        </span>
-      {%- endif -%}
+      {% if post.status %}
+  <span class="pub__status">
+    {%- case post.status | downcase -%}
+      {%- when "under_review" -%}Under Review
+      {%- when "major_revision" -%}Major Revision
+      {%- when "minor_revision" -%}Minor Revision
+      {%- when "accepted" -%}Accepted
+      {%- when "in_press" -%}In Press
+      {%- when "published" -%}Published
+      {%- when "draft" -%}Draft
+      {%- else -%}{{ post.status | replace: "_"," " | capitalize }}
+    {%- endcase -%}
+  </span>
+{% endif %}
 
       {%- if post.pdf_link -%}
         <a class="pub__link" href="{{ post.pdf_link }}" target="_blank" rel="noopener">
