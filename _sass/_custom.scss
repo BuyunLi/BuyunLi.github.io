@@ -1,15 +1,22 @@
 /* ===============================
    3 columns: sidebar | content | TOC
+   (slimmer left, a bit wider TOC)
    =============================== */
 #main.with-toc {
-  display: grid;
-  grid-template-columns: minmax(220px, 300px) 1fr minmax(220px, 320px);
-  gap: 2rem;
+  display: grid !important;
+  grid-template-columns:
+    clamp(140px, 15vw, 180px)   /* LEFT sidebar (slimmer) */
+    minmax(0, 1fr)              /* MAIN content */
+    clamp(240px, 22vw, 280px);  /* RIGHT TOC (a bit wider) */
+  gap: 1.25rem !important;
   align-items: start;
   box-sizing: border-box;
+  max-width: 1180px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-/* Make sure theme floats/widths don’t override our grid on this page */
+/* Make sure theme floats/widths don’t fight the grid */
 #main.with-toc > .sidebar,
 #main.with-toc > .archive,
 #main.with-toc > .toc--right {
@@ -28,40 +35,73 @@
   top: 6rem;
   max-height: calc(100vh - 6rem);
   overflow: auto;
-  padding-left: 1rem;
+  padding-left: 0.75rem;
   border-left: 1px solid #e0e0e0;
+  justify-self: end;
 }
 
 /* Mobile: stack */
 @media (max-width: 980px) {
-  #main.with-toc { grid-template-columns: 1fr; }
-  #main.with-toc > .sidebar,
-  #main.with-toc > .archive,
-  #main.with-toc > .toc--right { grid-column: 1; }
+  #main.with-toc { grid-template-columns: 1fr !important; gap: 1rem; max-width: none; }
   #main.with-toc > .toc--right {
     border-left: 0;
     border-top: 1px solid #e0e0e0;
-    margin-top: 1rem;
     padding-top: 1rem;
     max-height: none;
+    justify-self: stretch;
   }
 }
 
 /* Smooth scrolling */
 html { scroll-behavior: smooth; }
 
-/* --- TOC styles: not uppercased, include status --- */
-.toc--right, .toc__title, .toc__list, .toc__list a {
-  text-transform: none !important;
-}
-.toc__title { font-size: 1rem; margin: 0.25rem 0 0.5rem; }
-.toc__list  { margin: 0; padding-left: 1rem; list-style: decimal; }
-.toc__list a { text-decoration: none; display: inline-block; }
-.toc__list a:hover { text-decoration: underline; }
-.toc__title-text { font-weight: 600; }
-.toc__status { font-weight: 500; opacity: 0.85; }
+/* =========================
+   TOC (smaller typography)
+   - numbers align with title
+   - status pill matches main
+   ========================= */
+.toc--right, .toc__title, .toc__list, .toc__list a,
+.toc__title-text, .toc__status, .toc__dash { text-transform: none !important; }
 
-/* --- Publication item styling --- */
+/* Smaller overall scale */
+.toc--right { font-size: 0.70rem; line-height: 1.28; } /* make everything “way smaller” */
+.toc__title { font-size: 0.95em; margin: 0.25rem 0 0.5rem; font-weight: 600; }
+
+/* Keep numeric marker outside, aligned with first line (title) */
+.toc__list { margin: 0; padding-left: 1.2rem; list-style: decimal outside; }
+.toc__list li { margin: 0 0 0.35rem; }
+
+/* Use inline so the marker aligns to the TITLE (not the pill) */
+.toc__list a {
+  display: inline;               /* important for marker alignment */
+  font-size: 1em;                /* inherit from .toc--right */
+  line-height: 1.26;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+.toc__list a:hover { text-decoration: underline; }
+
+.toc__title-text { font-weight: 600; }
+.toc__dash       { opacity: 0.8; }
+
+/* Mini status pill in TOC — same style family as main pill */
+.pub__status--mini {
+  display: inline;
+  font-size: 0.62rem;            /* smaller than main */
+  font-weight: 700;
+  padding: 0.08em 0.40em;
+  border-radius: 999px;
+  line-height: 1;                /* keeps height compact to avoid shifting marker */
+  background: #f1f3f5;
+  color: #333;
+  border: 1px solid #d0d5da;
+  vertical-align: baseline;      /* align to the title baseline */
+  margin-left: .25rem;
+}
+
+/* =========================
+   Publication items (middle)
+   ========================= */
 .archive .archive__item {
   border-bottom: 2px solid #cfd8dc;
   padding-bottom: 1rem;
@@ -69,84 +109,17 @@ html { scroll-behavior: smooth; }
 }
 .archive .archive__item:last-child { border-bottom: 0; }
 
-/* Meta row: status pill — venue (smaller) — year */
+.archive__item-title {
+  font-size: 0.95rem;
+  line-height: 1.25;
+  margin: 0 0 0.25rem;
+  font-weight: 600;
+}
+
 .pub__meta { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0.35rem; }
 .pub__dash { opacity: 0.7; }
-.pub__venue { font-size: 0.95rem; color: #555; }
-.pub__year  { font-size: 0.95rem; color: #666; }
+.pub__venue { font-size: 0.92rem; color: #555; }
+.pub__year  { font-size: 0.92rem; color: #666; }
 .pub__dot   { color: #aaa; }
 
-/* Status pill (neutral look) */
-.pub__status {
-  display: inline-block;
-  font-size: 0.78rem;
-  font-weight: 700;
-  padding: 0.18em 0.6em;
-  border-radius: 999px;
-  line-height: 1;
-  background: #f1f3f5;
-  color: #333;
-  border: 1px solid #d0d5da;
-}
-
-/* Footer (for Preprint link) */
-.pub__footer {
-  margin-top: 0.5rem;
-  display: flex;
-  gap: 0.75rem;
-  align-items: center;
-  flex-wrap: wrap;
-}
-.pub__link {
-  font-weight: 600;
-  text-decoration: none;
-  border-bottom: 1px solid transparent;
-}
-.pub__link:hover { text-decoration: underline; }
-
-/* ======= FORCE slimmer sidebar + TOC on publications page ======= */
-#main.with-toc {
-  display: grid !important;
-  grid-template-columns:
-    150px                 /* LEFT sidebar (fixed, slimmer) */
-    minmax(0, 1fr)        /* MAIN content */
-    200px                 /* RIGHT TOC (fixed, slimmer) */
-    !important;
-  gap: 1.25rem !important;
-  max-width: 1180px;      /* keep page from stretching too wide */
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* Prevent theme styles from widening the side columns */
-#main.with-toc > .sidebar,
-#main.with-toc > .toc--right {
-  width: auto !important;
-  max-width: initial !important;
-  min-width: 0 !important;
-}
-
-/* Extra caps to ensure nothing inside forces a wider column */
-#main.with-toc > .sidebar { max-width: 150px !important; }
-#main.with-toc > .toc--right {
-  max-width: 200px !important;
-  padding-left: 0.75rem !important;
-}
-
-/* Keep grid from being overridden by floats or max-widths */
-#main.with-toc > .sidebar,
-#main.with-toc > .archive,
-#main.with-toc > .toc--right {
-  float: none !important;
-  max-width: none;  /* allowed to shrink due to explicit caps above */
-}
-
-/* Mobile: stack */
-@media (max-width: 980px) {
-  #main.with-toc {
-    grid-template-columns: 1fr !important;
-    max-width: none;
-  }
-}
-
-
+/* Main pil*
