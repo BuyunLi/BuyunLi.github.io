@@ -124,3 +124,25 @@
     justify-self: stretch;
   }
 }
+
+/* ===== Smaller status text (main list + TOC) ===== */
+
+/* Main list pill — smaller text + slightly tighter padding */
+.pub__status {
+  font-size: 0.70rem;        /* was ~0.78rem */
+  padding: 0.14em 0.50em;    /* slimmer pill */
+  line-height: 1;            /* keeps height compact */
+}
+
+/* TOC mini pill — scales with .toc--right's base font */
+.toc--right .pub__status--mini {
+  font-size: 0.78em;         /* smaller than before (relative to TOC base) */
+  padding: 0.10em 0.45em;
+  line-height: 1;
+}
+
+/* If you ever render fallback plain-text status in TOC */
+.toc--right .toc__status {
+  font-size: 0.9em;          /* smaller than title text */
+  opacity: 0.85;
+}
