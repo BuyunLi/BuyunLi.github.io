@@ -2,29 +2,30 @@
 layout: default
 ---
 
-{% if page.header.overlay_color or page.header.overlay_image or page.header.image %}
-  {% include page__hero.html %}
-{% endif %}
-
-{% if page.url != "/" and site.breadcrumbs %}
-  {% unless paginator %}{% include breadcrumbs.html %}{% endunless %}
-{% endif %}
-
-{%- comment -%}
-List all documents from the `teaching` collection.
-If you add `rank:` in a file's front matter, those appear first (ascending),
-then the rest are shown alphabetically by title.
-{%- endcomment -%}
 {%- assign all = site.teaching -%}
 {%- assign ranked   = all | where_exp: "t", "t.rank" | sort: "rank" -%}
 {%- assign unranked = all | where_exp: "t", "t.rank == nil" | sort: "title" -%}
 {%- assign items    = ranked | concat: unranked -%}
 
 <div id="main" role="main" class="teach-index">
+  <!-- LEFT: simple author card (Primer-compatible, no includes) -->
   <aside class="sidebar">
-    {% include author-profile.html %}
+    {%- assign avatar = site.author.avatar -%}
+    {%- if avatar -%}
+      <img class="sidebar__avatar" src="{{ avatar | relative_url }}" alt="{{ site.author.name | default: site.title }}">
+    {%- endif -%}
+    <div class="sidebar__bio">
+      <h2 class="sidebar__name">{{ site.author.name | default: site.title }}</h2>
+      {%- if site.author.bio -%}
+        <div class="sidebar__text">{{ site.author.bio }}</div>
+      {%- endif -%}
+      {%- if site.author.email -%}
+        <div class="sidebar__contact"><a href="mailto:{{ site.author.email }}">{{ site.author.email }}</a></div>
+      {%- endif -%}
+    </div>
   </aside>
 
+  <!-- RIGHT: teaching list -->
   <div class="archive">
     <h1 class="page__title">{{ page.title | default: "Teaching" }}</h1>
 
@@ -42,26 +43,26 @@ then the rest are shown alphabetically by title.
           </p>
 
           {%- if post.eval_overall or post.eval_support or post.eval_materials or post.eval_enrollment -%}
-          <p class="teach__evals">
-            {%- if post.eval_overall -%}
-              <span class="teach__chip"><span class="teach__lbl">Overall</span> {{ post.eval_overall }}</span>
-            {%- endif -%}
-            {%- if post.eval_support -%}
-              <span class="teach__chip"><span class="teach__lbl">Support</span> {{ post.eval_support }}</span>
-            {%- endif -%}
-            {%- if post.eval_materials -%}
-              <span class="teach__chip"><span class="teach__lbl">Materials</span> {{ post.eval_materials }}</span>
-            {%- endif -%}
-            {%- if post.eval_enrollment -%}
-              <span class="teach__chip"><span class="teach__lbl">Enrollment</span> {{ post.eval_enrollment }}</span>
-            {%- endif -%}
-          </p>
+            <p class="teach__evals">
+              {%- if post.eval_overall -%}
+                <span class="teach__chip"><span class="teach__lbl">Overall</span> {{ post.eval_overall }}</span>
+              {%- endif -%}
+              {%- if post.eval_support -%}
+                <span class="teach__chip"><span class="teach__lbl">Support</span> {{ post.eval_support }}</span>
+              {%- endif -%}
+              {%- if post.eval_materials -%}
+                <span class="teach__chip"><span class="teach__lbl">Materials</span> {{ post.eval_materials }}</span>
+              {%- endif -%}
+              {%- if post.eval_enrollment -%}
+                <span class="teach__chip"><span class="teach__lbl">Enrollment</span> {{ post.eval_enrollment }}</span>
+              {%- endif -%}
+            </p>
           {%- endif -%}
 
           {%- if post.content and post.content != "" -%}
-          <div class="teach__body">
-            {{ post.content }}
-          </div>
+            <div class="teach__body">
+              {{ post.content }}
+            </div>
           {%- endif -%}
         </article>
       {%- endfor -%}
