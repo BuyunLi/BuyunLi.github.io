@@ -223,3 +223,67 @@
 .archive__item-excerpt details.abs[open] > p:first-of-type {
   margin-top: .25rem;
 }
+
+/* ================================
+   1) Keep TOC status inline at end
+   ================================ */
+
+/* Make each TOC link render inline so nothing pushes the status to the right */
+#main.with-toc .toc__list a {
+  display: inline !important;        /* override any inline-flex/block from earlier */
+  white-space: normal;
+}
+
+/* Ensure the status is not floated right by the theme */
+#main.with-toc .toc--right .pub__status--mini,
+#main.with-toc .toc--right .toc__status {
+  float: none !important;
+  display: inline !important;
+  margin-left: 0.35rem;              /* small gap after the title/dash */
+  vertical-align: baseline;
+}
+
+/* Keep list markers aligned with the title line */
+#main.with-toc .toc__list {
+  list-style: decimal outside;
+  padding-left: 1.1rem;
+}
+
+/* Optional: if you use a dash before the pill, keep it inline too */
+#main.with-toc .toc__dash { display: inline; opacity: 0.8; }
+
+/* ================================
+   2) Narrow the page + TOC column
+   ================================ */
+
+/* Constrain the overall width of the publications page and center it */
+#main.with-toc {
+  max-width: 1080px;                 /* ← make page narrower; tweak to taste (e.g., 1040–1160px) */
+  margin-left: auto;
+  margin-right: auto;
+
+  /* Keep your 2-column grid but give the TOC a slightly smaller share */
+  grid-template-columns: minmax(0, 7fr) minmax(240px, 2.3fr);  /* ~70% / ~23–25% */
+  gap: 1rem;                         /* a bit tighter gap so layout feels cleaner */
+}
+
+/* Sticky, slim TOC */
+#main.with-toc > .toc--right {
+  max-width: 300px;                  /* hard cap so TOC can’t bloat */
+  padding-left: 0.5rem;
+  border-left: 1px solid #e0e0e0;
+  position: sticky;
+  top: 6rem;
+}
+
+/* Mobile: unchanged stack */
+@media (max-width: 980px) {
+  #main.with-toc { max-width: none; grid-template-columns: 1fr; gap: 1rem; }
+  #main.with-toc > .toc--right {
+    border-left: 0;
+    border-top: 1px solid #e0e0e0;
+    padding-top: 1rem;
+    max-width: none;
+  }
+}
+
