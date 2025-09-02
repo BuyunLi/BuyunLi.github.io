@@ -6,7 +6,7 @@ permalink: /teaching/2015-spring-teaching-1
 venue: "Cornell University, SC Johnson College of Business"
 location: "Fall 2018 Ithaca, USA"
 ---
-Teaching assistant for MBA classes. 
+Teaching assistant for the MBA class. 
 
 ======
 
