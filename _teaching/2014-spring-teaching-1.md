@@ -1,5 +1,4 @@
 ---
-layout: teaching
 title: "BUS-K303 Technology & Business Analytics"
 collection: teaching
 type: "Undergraduate course"
