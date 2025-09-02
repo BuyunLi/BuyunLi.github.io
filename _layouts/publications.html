@@ -35,6 +35,12 @@ layout: default
               {%- when "in_press" -%}In Press
               {%- when "published" -%}Published
               {%- when "draft" -%}Draft
+              {%- when "work_in_progress" -%}Work in Progress
+              {%- when "wip" -%}Work in Progress
+              {%- when "working_paper" -%}Work in Progress
+              {%- when "in_preparation" -%}Work in Progress
+              {%- when "work-in-progress" -%}Work in Progress
+              {%- when "work in progress" -%}Work in Progress
               {%- else -%}{{ post.status | replace: "_"," " | capitalize }}
             {%- endcase -%}
           {%- endcapture -%}
@@ -93,6 +99,12 @@ layout: default
               {%- when "in_press" -%}In Press
               {%- when "published" -%}Published
               {%- when "draft" -%}Draft
+              {%- when "work_in_progress" -%}Work in Progress
+              {%- when "wip" -%}Work in Progress
+              {%- when "working_paper" -%}Work in Progress
+              {%- when "in_preparation" -%}Work in Progress
+              {%- when "work-in-progress" -%}Work in Progress
+              {%- when "work in progress" -%}Work in Progress
               {%- else -%}{{ post.status | replace: "_"," " | capitalize }}
             {%- endcase -%}
           {%- endcapture -%}
@@ -100,7 +112,8 @@ layout: default
             <a href="#pub-{{ post.slug | slugify }}">
               <span class="toc__title-text">{{ post.title }}</span>
               {%- if post.status -%}
-                <span class="toc__status"> — {{ status_label | strip }}</span>
+                <span class="toc__dash"> — </span>
+                <span class="pub__status pub__status--mini">{{ status_label | strip }}</span>
               {%- endif -%}
             </a>
           </li>
