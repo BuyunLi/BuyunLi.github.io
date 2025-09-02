@@ -226,3 +226,66 @@ html { scroll-behavior: smooth; }
 .toc__list a:hover { text-decoration: underline; }
 .toc__title-text { font-weight: 600; }
 
+/* --- Force 3-column placement with grid areas --- */
+#main.teach-3col {
+  display: grid !important;
+  grid-template-columns:
+    clamp(160px, 16vw, 210px)  /* LEFT author */
+    minmax(0, 1fr)             /* MIDDLE content */
+    clamp(220px, 22vw, 280px); /* RIGHT TOC */
+  grid-template-areas: "left mid right";
+  gap: 1.25rem !important;
+  align-items: start;
+  max-width: 1180px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* Kill theme floats and explicitly place each area */
+#main.teach-3col > .sidebar,
+#main.teach-3col > .archive,
+#main.teach-3col > .toc--right,
+#main.teach-3col > .toc {
+  float: none !important;
+  width: auto !important;
+  max-width: none !important;
+  margin: 0 !important;
+  min-width: 0 !important;
+}
+
+#main.teach-3col > .sidebar   { grid-area: left  !important; }
+#main.teach-3col > .archive   { grid-area: mid   !important; }
+#main.teach-3col > .toc--right,
+#main.teach-3col > .toc       { grid-area: right !important; justify-self: end; }
+
+/* Sticky TOC */
+#main.teach-3col > .toc--right,
+#main.teach-3col > .toc {
+  position: sticky;
+  top: 6rem;
+  max-height: calc(100vh - 6rem);
+  overflow: auto;
+  padding-left: 0.75rem;
+  border-left: 1px solid #e0e0e0;
+}
+
+/* Mobile: stack */
+@media (max-width: 980px) {
+  #main.teach-3col {
+    grid-template-columns: 1fr !important;
+    grid-template-areas:
+      "left"
+      "mid"
+      "right";
+    gap: 1rem !important;
+    max-width: none;
+  }
+  #main.teach-3col > .toc--right,
+  #main.teach-3col > .toc {
+    border-left: 0;
+    border-top: 1px solid #e0e0e0;
+    padding-top: 1rem;
+    max-height: none;
+    justify-self: stretch;
+  }
+}
