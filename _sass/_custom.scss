@@ -1,148 +1,71 @@
-/* ============================
-   3-COLUMN LAYOUT (Primer)
-   sidebar | content | right TOC
-   ============================ */
-
-#main.with-3col {
+/* --- Layout: three columns (sidebar | content | right TOC) --- */
+#main.with-toc {
   display: grid;
-  /* Slim photo sidebar, wide content, slim TOC */
-  grid-template-columns:
-    clamp(180px, 18vw, 220px)   /* LEFT sidebar */
-    minmax(0, 1fr)              /* MAIN content */
-    clamp(220px, 24vw, 280px);  /* RIGHT TOC */
-  gap: 1.25rem;
+  grid-template-columns: minmax(240px, 320px) 1fr minmax(280px, 380px); /* a bit wider TOC */
+  gap: 2rem;
   align-items: start;
-  box-sizing: border-box;
-  max-width: 1200px;            /* keep overall page tidy */
-  margin-left: auto;
-  margin-right: auto;
 }
-
-/* Make sure theme floats/widths don't fight the grid */
-#main.with-3col > .sidebar,
-#main.with-3col > .archive,
-#main.with-3col > .toc--right {
-  float: none !important;
-  width: auto !important;
-  max-width: none !important;
-  margin: 0 !important;
-  min-width: 0;
-}
-
-/* Column placement */
-#main.with-3col > .sidebar   { grid-column: 1; }
-#main.with-3col > .archive   { grid-column: 2; }
-#main.with-3col > .toc--right{
+#main.with-toc > .sidebar { grid-column: 1; }
+#main.with-toc > .archive { grid-column: 2; }
+#main.with-toc > .toc--right {
   grid-column: 3;
   position: sticky;
   top: 6rem;
   max-height: calc(100vh - 6rem);
   overflow: auto;
-  padding-left: 0.75rem;
+  padding-left: 1rem;
   border-left: 1px solid #e0e0e0;
-  justify-self: end;           /* hug right edge */
 }
 
-/* ============================
-   LEFT SIDEBAR (photo + info)
-   ============================ */
-.sidebar__avatar {
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: 12px;
-  box-shadow: 0 1px 4px rgba(0,0,0,.08);
-  margin-bottom: .75rem;
-  object-fit: cover;
+/* Mobile: stack */
+@media (max-width: 980px) {
+  #main.with-toc { grid-template-columns: 1fr; }
+  #main.with-toc > .sidebar,
+  #main.with-toc > .archive,
+  #main.with-toc > .toc--right { grid-column: 1; }
+  #main.with-toc > .toc--right {
+    border-left: 0;
+    border-top: 1px solid #e0e0e0;
+    margin-top: 1rem;
+    padding-top: 1rem;
+  }
 }
-.sidebar__name {
-  font-size: 1rem;
-  margin: 0 0 .25rem;
-  font-weight: 700;
+
+/* Smooth scrolling */
+html { scroll-behavior: smooth; }
+
+/* --- TOC styles: not uppercased, include status --- */
+.toc--right, .toc__title, .toc__list, .toc__list a {
+  text-transform: none !important; /* ensure no ALL CAPS */
 }
-.sidebar__text { font-size: .9rem; line-height: 1.35; }
-.sidebar__contact a { font-size: .85rem; }
-
-/* ============================
-   TOC (right column)
-   - smaller, no all-caps
-   - numbers align with title
-   - status kept inline (not flushed right)
-   ============================ */
-.toc--right, .toc__title, .toc__section, .toc__list, .toc__list a,
-.toc__title-text, .toc__status, .toc__dash { text-transform: none !important; }
-
-.toc--right { font-size: 0.78rem; line-height: 1.3; }
-.toc__title   { font-size: 1.0em; margin: 0.25rem 0 0.5rem; }
-.toc__section { font-size: 0.95em; margin: 0.6rem 0 0.25rem; opacity: 0.85; }
-
-.toc__list  { margin: 0; padding-left: 1.2rem; list-style: decimal outside; }
-.toc__list li { margin: 0 0 0.35rem; }
-
-/* Keep everything inline so status pill sits right after the title */
-.toc__list a {
-  display: inline;                /* inline keeps marker aligned to first line */
-  font-size: 1em;
-  line-height: 1.28;
-  text-decoration: none;
-  overflow-wrap: anywhere;
-}
+.toc__title { font-size: 1rem; margin: 0.25rem 0 0.5rem; }
+.toc__list { margin: 0; padding-left: 1rem; list-style: decimal; }
+.toc__list a { text-decoration: none; display: inline-block; }
 .toc__list a:hover { text-decoration: underline; }
-
 .toc__title-text { font-weight: 600; }
-.toc__dash { opacity: 0.8; }
+.toc__status { font-weight: 500; opacity: 0.85; }
 
-/* Mini pill in TOC */
-.pub__status--mini {
-  display: inline;
-  font-size: 0.78em;
-  font-weight: 700;
-  padding: 0.10em 0.45em;
-  border-radius: 999px;
-  line-height: 1;
-  background: #f1f3f5;
-  color: #333;
-  border: 1px solid #d0d5da;
-  margin-left: .35rem;
-}
-
-/* ============================
-   MAIN CONTENT (middle)
-   ============================ */
-.pub__section {
-  margin: 1.6rem 0 0.75rem;
-  font-size: 1.05rem;
-  border-bottom: 1px solid #e5e7eb;
-  padding-bottom: 0.25rem;
-}
+/* --- Publication item styling --- */
 .archive .archive__item {
-  border-bottom: 2px solid #cfd8dc;  /* clearer separator */
+  border-bottom: 2px solid #cfd8dc; /* clearer separator */
   padding-bottom: 1rem;
   margin-bottom: 1.25rem;
 }
 .archive .archive__item:last-child { border-bottom: 0; }
 
-/* (Smaller) titles + meta */
-.archive__item-title {
-  font-size: 0.95rem;
-  line-height: 1.25;
-  margin: 0 0 0.25rem;
-  font-weight: 600;
-}
-.archive__item-meta { margin: 0; }
-
+/* Meta row: status pill — venue (smaller) — year */
 .pub__meta { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0.35rem; }
 .pub__dash { opacity: 0.7; }
-.pub__venue { font-size: 0.92rem; color: #555; }
-.pub__year  { font-size: 0.92rem; color: #666; }
+.pub__venue { font-size: 0.95rem; color: #555; }
+.pub__year  { font-size: 0.95rem; color: #666; }
 .pub__dot   { color: #aaa; }
 
-/* Status pill (main list) */
+/* Status pill (neutral look) */
 .pub__status {
   display: inline-block;
-  font-size: 0.66rem;
+  font-size: 0.78rem;
   font-weight: 700;
-  padding: 0.10em 0.44em;
+  padding: 0.18em 0.6em;
   border-radius: 999px;
   line-height: 1;
   background: #f1f3f5;
@@ -150,7 +73,7 @@
   border: 1px solid #d0d5da;
 }
 
-/* Preprint link */
+/* Footer (for Preprint link) */
 .pub__footer {
   margin-top: 0.5rem;
   display: flex;
@@ -164,47 +87,3 @@
   border-bottom: 1px solid transparent;
 }
 .pub__link:hover { text-decoration: underline; }
-
-/* ============================
-   Inline "Show Full Abstract" button
-   ============================ */
-.archive__item-excerpt details.abs { display: inline; }
-.archive__item-excerpt details.abs > summary {
-  display: inline;
-  cursor: pointer;
-  color: #1a73e8;                  /* blue */
-  font-weight: 600;
-  margin-left: 0.35rem;
-  padding: 0 .1rem;
-  border-radius: .2rem;
-}
-.archive__item-excerpt details.abs > summary:hover,
-.archive__item-excerpt details.abs > summary:focus {
-  color: #0b57d0;
-  text-decoration: underline;
-  outline: none;
-}
-.archive__item-excerpt details.abs > summary::-webkit-details-marker { display: none; }
-.archive__item-excerpt details.abs > summary::marker { content: ""; }
-.archive__item-excerpt details.abs[open] { display: block; margin-top: .4rem; }
-.archive__item-excerpt details.abs[open] > p:first-of-type { margin-top: .25rem; }
-
-/* ============================
-   Global niceties
-   ============================ */
-html { scroll-behavior: smooth; }
-
-@media (max-width: 980px) {
-  #main.with-3col {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-    max-width: none;
-  }
-  #main.with-3col > .toc--right {
-    border-left: 0;
-    border-top: 1px solid #e0e0e0;
-    padding-top: 1rem;
-    max-height: none;
-    justify-self: stretch;
-  }
-}
