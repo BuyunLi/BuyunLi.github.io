@@ -2,27 +2,29 @@
 layout: default
 ---
 
-{%- comment -%}
-Primer-compatible publications layout
-- Section 1: Research Papers  (everything NOT work_in_progress)
-- Section 2: Work in Progress Papers (status == work_in_progress)
-- Right TOC: "Research Papers" + "In preparation"
-{%- endcomment -%}
+{% if page.header.overlay_color or page.header.overlay_image or page.header.image %}
+  {% include page__hero.html %}
+{% endif %}
 
-{%- assign all = site.publications | sort: "year" | reverse -%}
-{%- assign wip = all | where_exp: "p", "p.status == 'work_in_progress'" -%}
-{%- assign main_items = all | where_exp: "p", "p.status != 'work_in_progress' or p.status == nil" -%}
+{% if page.url != "/" and site.breadcrumbs %}
+  {% unless paginator %}
+    {% include breadcrumbs.html %}
+  {% endunless %}
+{% endif %}
 
-<div id="main" class="with-toc">
-  <!-- MAIN CONTENT -->
+{%- assign items = site.publications | sort: "year" | reverse -%}
+
+<div id="main" role="main" class="with-toc">
+  {% include sidebar.html %}
+
   <div class="archive">
-    <h1 class="page__title">{{ page.title }}</h1>
+    {% unless page.header.overlay_color or page.header.overlay_image %}
+      <h1 class="page__title">{{ page.title }}</h1>
+    {% endunless %}
 
     <div class="archive__content">
-
-      {%- if main_items and main_items.size > 0 -%}
-        <h2 class="pub__section">Research Papers</h2>
-        {%- for post in main_items -%}
+      {%- if items and items.size > 0 -%}
+        {%- for post in items -%}
           {%- assign raw_status = post.status | downcase -%}
           {%- capture status_label -%}
             {%- case raw_status -%}
@@ -34,12 +36,16 @@ Primer-compatible publications layout
               {%- when "published" -%}Published
               {%- when "draft" -%}Draft
               {%- when "work_in_progress" -%}Work in Progress
+              {%- when "wip" -%}Work in Progress
+              {%- when "working_paper" -%}Work in Progress
+              {%- when "in_preparation" -%}Work in Progress
+              {%- when "work-in-progress" -%}Work in Progress
+              {%- when "work in progress" -%}Work in Progress
               {%- else -%}{{ post.status | replace: "_"," " | capitalize }}
             {%- endcase -%}
           {%- endcapture -%}
 
-          {%- assign anchor_id = post.slug | default: post.title | slugify -%}
-          <article id="pub-{{ anchor_id }}" class="archive__item">
+          <article id="pub-{{ post.slug | slugify }}" class="archive__item">
             <h2 class="archive__item-title">{{ post.title }}</h2>
 
             {%- if post.authors -%}
@@ -72,56 +78,17 @@ Primer-compatible publications layout
             </div>
           </article>
         {%- endfor -%}
-      {%- endif -%}
-
-      {%- if wip and wip.size > 0 -%}
-        <h2 class="pub__section">Work in Progress Papers</h2>
-        {%- for post in wip -%}
-          {%- assign anchor_id = post.slug | default: post.title | slugify -%}
-          <article id="pub-{{ anchor_id }}" class="archive__item">
-            <h2 class="archive__item-title">{{ post.title }}</h2>
-
-            {%- if post.authors -%}
-              <p class="archive__item-meta">{{ post.authors }}</p>
-            {%- endif -%}
-
-            <p class="archive__item-meta pub__meta">
-              <span class="pub__status">Work in Progress</span>
-              {%- if post.venue -%}
-                <span class="pub__dash">&nbsp;—&nbsp;</span>
-                <span class="pub__venue"><em>{{ post.venue }}</em></span>
-              {%- endif -%}
-              {%- if post.year -%}
-                <span class="pub__dot"> · </span><span class="pub__year">{{ post.year }}</span>
-              {%- endif -%}
-            </p>
-
-            {%- if post.abstract -%}
-              <div class="archive__item-excerpt">{{ post.abstract }}</div>
-            {%- endif -%}
-
-            <div class="pub__footer">
-              {%- if post.pdf_link -%}
-                <a class="pub__link" href="{{ post.pdf_link }}" target="_blank" rel="noopener">📄 Preprint</a>
-              {%- endif -%}
-            </div>
-          </article>
-        {%- endfor -%}
-      {%- endif -%}
-
-      {%- if main_items.size == 0 and wip.size == 0 -%}
+      {%- else -%}
         {{ content }}
       {%- endif -%}
     </div>
   </div>
 
-  <!-- RIGHT-SIDE TOC -->
   <aside class="toc toc--right">
-    <h2 class="toc__title">Research Papers</h2>
-
-    {%- if main_items and main_items.size > 0 -%}
-      <ol class="toc__list">
-        {%- for post in main_items -%}
+    <h2 class="toc__title">Publications</h2>
+    <ol class="toc__list">
+      {%- if items and items.size > 0 -%}
+        {%- for post in items -%}
           {%- assign raw_status = post.status | downcase -%}
           {%- capture status_label -%}
             {%- case raw_status -%}
@@ -133,12 +100,16 @@ Primer-compatible publications layout
               {%- when "published" -%}Published
               {%- when "draft" -%}Draft
               {%- when "work_in_progress" -%}Work in Progress
+              {%- when "wip" -%}Work in Progress
+              {%- when "working_paper" -%}Work in Progress
+              {%- when "in_preparation" -%}Work in Progress
+              {%- when "work-in-progress" -%}Work in Progress
+              {%- when "work in progress" -%}Work in Progress
               {%- else -%}{{ post.status | replace: "_"," " | capitalize }}
             {%- endcase -%}
           {%- endcapture -%}
-          {%- assign anchor_id = post.slug | default: post.title | slugify -%}
           <li>
-            <a href="#pub-{{ anchor_id }}">
+            <a href="#pub-{{ post.slug | slugify }}">
               <span class="toc__title-text">{{ post.title }}</span>
               {%- if post.status -%}
                 <span class="toc__dash"> — </span>
@@ -147,23 +118,7 @@ Primer-compatible publications layout
             </a>
           </li>
         {%- endfor -%}
-      </ol>
-    {%- endif -%}
-
-    {%- if wip and wip.size > 0 -%}
-      <h3 class="toc__section">In preparation</h3>
-      <ol class="toc__list">
-        {%- for post in wip -%}
-          {%- assign anchor_id = post.slug | default: post.title | slugify -%}
-          <li>
-            <a href="#pub-{{ anchor_id }}">
-              <span class="toc__title-text">{{ post.title }}</span>
-              <span class="toc__dash"> — </span>
-              <span class="pub__status pub__status--mini">Work in Progress</span>
-            </a>
-          </li>
-        {%- endfor -%}
-      </ol>
-    {%- endif -%}
+      {%- endif -%}
+    </ol>
   </aside>
 </div>
