@@ -3,20 +3,14 @@ layout: default
 title: "Teaching"
 permalink: /teaching/
 ---
-<div id="main" class="teach-3col" role="main">
-  <aside class="sidebar">…author profile…</aside>
-  <div class="archive">…teaching list…</div>
-  <aside class="toc toc--right">…TOC…</aside>
-</div>
 
 {%- assign items = site.teaching | sort: "title" -%}
 
 <div id="main" class="teach-3col" role="main">
-  <!-- LEFT: author profile (no theme includes) -->
+  <!-- LEFT: author profile -->
   <aside class="sidebar">
-    {%- assign avatar = site.author.avatar -%}
-    {%- if avatar -%}
-      <img class="sidebar__avatar" src="{{ avatar | relative_url }}" alt="{{ site.author.name | default: site.title }}">
+    {%- if site.author.avatar -%}
+      <img class="sidebar__avatar" src="{{ site.author.avatar | relative_url }}" alt="{{ site.author.name | default: site.title }}">
     {%- endif -%}
     <div class="sidebar__bio">
       <h2 class="sidebar__name">{{ site.author.name | default: site.title }}</h2>
@@ -77,13 +71,10 @@ permalink: /teaching/
     <ol class="toc__list">
       {%- for c in items -%}
         {%- assign anchor_id = c.slug | default: c.title | slugify -%}
-        <li>
-          <a href="#teach-{{ anchor_id }}" class="toc__anchor">
-            <span class="toc__title-text">{{ c.title }}</span>
-          </a>
-        </li>
+        <li><a href="#teach-{{ anchor_id }}" class="toc__anchor">
+          <span class="toc__title-text">{{ c.title }}</span>
+        </a></li>
       {%- endfor -%}
     </ol>
   </aside>
 </div>
-
