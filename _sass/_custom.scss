@@ -1,95 +1,75 @@
-/* ============================
-   Publications: 2-column layout
-   content (~70%) | TOC (~25%)
-   ============================ */
-
-/* Force a clean 2-col grid on pages using this layout */
+/* ====== Publications: 2-column layout (content | wider TOC) ====== */
 #main.with-toc {
   display: grid !important;
-  grid-template-columns: minmax(0, 7fr) minmax(300px, 4fr); /* ≈ 70% / 25% */
+  grid-template-columns: minmax(0, 6.5fr) minmax(360px, 3.5fr); /* ~65% | ~35% (TOC wider) */
   gap: 1.25rem;
   align-items: start;
   box-sizing: border-box;
 }
 
-/* Hide the left sidebar on this page to truly have 2 columns */
+/* Hide left sidebar on this page to keep it truly 2 columns */
 #main.with-toc > .sidebar { display: none !important; }
 
-/* Neutralize theme floats/widths inside this page */
+/* Neutralize theme floats/widths inside this layout */
 #main.with-toc > .archive,
 #main.with-toc > .toc--right {
   float: none !important;
   width: auto !important;
   max-width: none !important;
   margin: 0 !important;
-  min-width: 0; /* allow shrink in grid */
+  min-width: 0;
 }
 
-/* Place the two columns */
+/* Right column behavior */
 #main.with-toc > .archive { grid-column: 1; }
 #main.with-toc > .toc--right {
   grid-column: 2;
+  justify-self: end;                /* hug the right edge */
   position: sticky;
   top: 6rem;
   max-height: calc(100vh - 6rem);
   overflow: auto;
-  padding-left: 0.5rem;
+  padding-left: 0.75rem;
   border-left: 1px solid #e0e0e0;
-  justify-self: end;         /* hug right edge */
 }
 
-/* Mobile: stack */
-@media (max-width: 980px) {
-  #main.with-toc {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-  #main.with-toc > .toc--right {
-    border-left: 0;
-    border-top: 1px solid #e0e0e0;
-    padding-top: 1rem;
-    max-height: none;
-    justify-self: stretch;
-  }
-}
-
-/* ============================
-   TOC: number aligns with title,
-   smaller text, no ALL CAPS
-   ============================ */
+/* ====== TOC typography: smaller, tidy, no ALL-CAPS ====== */
 .toc--right, .toc__title, .toc__list, .toc__list a,
-.toc__title-text, .toc__status, .toc__dash {
-  text-transform: none !important;
-}
+.toc__title-text, .toc__status, .toc__dash { text-transform: none !important; }
 
-.toc__title { font-size: 0.95rem; margin: 0.25rem 0 0.5rem; }
+/* Set a smaller base for the whole TOC (titles, numbers, links inherit) */
+.toc--right { font-size: 0.78rem; line-height: 1.3; }   /* tweak: 0.76–0.80rem if you like */
 
-/* Keep numeric marker outside, aligned with first line (title) */
+.toc__title   { font-size: 1.0em; margin: 0.25rem 0 0.5rem; }  /* ≈ 0.78rem */
+.toc__section { font-size: 0.95em; margin: 0.6rem 0 0.25rem; opacity: 0.85; }
+
+/* Keep numeric marker outside and aligned with the TITLE (not the pill) */
 .toc__list {
   margin: 0;
-  padding-left: 1.1rem;      /* space for 1., 2., … */
+  padding-left: 1.2rem;                 /* space for 1., 2., … */
   list-style: decimal outside;
 }
+.toc__list li { margin: 0 0 0.35rem; }
 
-/* Align title + pill on one baseline so marker aligns to title */
+/* Align title + pill on the same baseline; allow nice wrapping */
 .toc__list a {
   display: inline-flex;
   align-items: baseline;
   gap: 0.35rem;
-  font-size: 0.85rem;
-  line-height: 1.3;
+  font-size: 1em !important;            /* inherit from .toc--right */
+  line-height: 1.28;
   text-decoration: none;
-  overflow-wrap: anywhere;   /* wrap long titles nicely */
+  overflow-wrap: anywhere;               /* break long titles cleanly */
 }
 .toc__list a:hover { text-decoration: underline; }
 
 .toc__title-text { font-weight: 600; }
 .toc__dash       { opacity: 0.8; }
 
-/* Mini status pill in TOC, matching main pill styling */
+/* Mini status pill in TOC (matches main pill, just smaller) */
 .pub__status--mini {
   display: inline-block;
-  font-size: 0.72rem;
+  font-size: 0.85em;                    /* scales with TOC base (≈ 0.66rem) */
   font-weight: 700;
   padding: 0.12em 0.5em;
   border-radius: 999px;
@@ -100,9 +80,7 @@
   vertical-align: baseline;
 }
 
-/* ============================
-   (Your existing main list styles)
-   ============================ */
+/* ====== Main publication list (unchanged) ====== */
 .archive .archive__item {
   border-bottom: 2px solid #cfd8dc;
   padding-bottom: 1rem;
@@ -128,38 +106,21 @@
   border: 1px solid #d0d5da;
 }
 
-.pub__footer {
-  margin-top: 0.5rem;
-  display: flex;
-  gap: 0.75rem;
-  align-items: center;
-  flex-wrap: wrap;
-}
-.pub__link {
-  font-weight: 600;
-  text-decoration: none;
-  border-bottom: 1px solid transparent;
-}
+.pub__footer { margin-top: 0.5rem; display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
+.pub__link { font-weight: 600; text-decoration: none; border-bottom: 1px solid transparent; }
 .pub__link:hover { text-decoration: underline; }
 
-.toc--right {
-  font-size: 0.72rem;   /* ← tweak this: try 0.80rem or 0.75rem if you want smaller */
-  line-height: 1.3;
+/* ====== Mobile: stack ====== */
+@media (max-width: 980px) {
+  #main.with-toc {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  #main.with-toc > .toc--right {
+    border-left: 0;
+    border-top: 1px solid #e0e0e0;
+    padding-top: 1rem;
+    max-height: none;
+    justify-self: stretch;
+  }
 }
-
-/* Keep headings a touch larger than the base, but still small */
-.toc--right .toc__title   { font-size: 0.7em; }  /* = 0.82rem */
-.toc--right .toc__section { font-size: 0.65em; } /* ~0.78rem */
-
-/* Ensure list markers (1., 2., …) and links use the base */
-.toc--right .toc__list,
-.toc--right .toc__list li,
-.toc--right .toc__list a,
-.toc--right .toc__status { font-size: 1em; }
-
-/* Mini status pill should scale with TOC base */
-.toc--right .pub__status--mini { font-size: 0.85em; line-height: 1; }
-
-/* (Keep your existing no-uppercase rule) */
-.toc--right, .toc__title, .toc__section, .toc__list, .toc__list a,
-.toc__title-text, .toc__status, .toc__dash { text-transform: none !important; }
