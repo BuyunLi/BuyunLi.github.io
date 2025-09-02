@@ -103,3 +103,26 @@ html { scroll-behavior: smooth; }
   border-bottom: 1px solid transparent;
 }
 .pub__link:hover { text-decoration: underline; }
+
+/* ===== Slimmer side columns (sidebar + TOC) ===== */
+/* Old: minmax(220px, 300px) 1fr minmax(220px, 320px) */
+#main.with-toc {
+  grid-template-columns:
+    clamp(140px, 15vw, 190px)   /* LEFT sidebar — was up to 300px */
+    minmax(0, 1fr)              /* MAIN content (grows more now) */
+    clamp(160px, 18vw, 220px);  /* RIGHT TOC — was up to 320px */
+  gap: 1.25rem;                  /* slightly tighter gap */
+  max-width: 1180px;             /* optional: keep overall page tidy */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Keep columns from stretching wider than intended */
+#main.with-toc > .toc--right { max-width: 220px; padding-left: 0.75rem; }
+#main.with-toc > .sidebar    { max-width: 190px; }
+
+/* Make sure nothing inside forces the columns wider */
+#main.with-toc > .sidebar,
+#main.with-toc > .archive,
+#main.with-toc > .toc--right { min-width: 0; }
+
