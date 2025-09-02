@@ -1,24 +1,80 @@
 /* --- Grid: sidebar | main | slim right TOC --- */
+/* =========================================
+   WIDTH TUNING: give main more space, slim TOC
+   ========================================= */
+
+/* 3-col grid: sidebar | MAIN | toc  */
 #main.with-toc {
   display: grid;
-  grid-template-columns: minmax(240px, 300px) 1fr minmax(190px, 230px); /* slimmer TOC */
-  gap: 2rem;
+  /* Sidebar stays modest, MAIN gets the lion’s share, TOC is slim */
+  grid-template-columns:
+    clamp(180px, 22vw, 240px)       /* left sidebar */
+    minmax(0, 1fr)                  /* MAIN content (flex) */
+    clamp(140px, 14vw, 180px);      /* TOC — narrower than before */
+  gap: 1.25rem;                      /* slightly tighter gap */
   align-items: start;
 }
+
+/* Make sure grid children can actually shrink inside the grid */
+#main.with-toc > .archive,
+#main.with-toc > .sidebar,
+#main.with-toc > .toc--right {
+  min-width: 0;
+}
+
 #main.with-toc > .sidebar { grid-column: 1; }
 #main.with-toc > .archive { grid-column: 2; }
 #main.with-toc > .toc--right {
   grid-column: 3;
+  justify-self: end;                 /* hug the right edge */
   position: sticky;
   top: 6rem;
   max-height: calc(100vh - 6rem);
   overflow: auto;
-  padding-left: 0.75rem;             /* less padding so it hugs right */
+  padding-left: 0.5rem;              /* less padding so it feels slimmer */
   border-left: 1px solid #e0e0e0;
-  justify-self: end;                 /* keep TOC tight to the right edge */
+  max-width: 180px;                  /* hard cap TOC width */
   width: 100%;
-  max-width: 230px;                  /* keep it narrow */
 }
+
+/* Mobile: stack everything naturally */
+@media (max-width: 980px) {
+  #main.with-toc {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  #main.with-toc > .sidebar,
+  #main.with-toc > .archive,
+  #main.with-toc > .toc--right {
+    grid-column: 1;
+    max-width: none;
+    justify-self: stretch;
+  }
+  #main.with-toc > .toc--right {
+    border-left: 0;
+    border-top: 1px solid #e0e0e0;
+    padding-top: 1rem;
+  }
+}
+
+/* =========================================
+   TOC TEXT: smaller + no uppercase
+   ========================================= */
+.toc--right, .toc__title, .toc__section, .toc__list, .toc__list a,
+.toc__title-text, .toc__status {
+  text-transform: none !important;
+}
+
+.toc__title      { font-size: 0.9rem;  margin: 0.25rem 0 0.5rem; }
+.toc__section    { font-size: 0.8rem;  margin: 0.6rem 0 0.25rem; opacity: 0.85; }
+.toc__list       { margin: 0; padding-left: 1rem; list-style: decimal; }
+.toc__list a     { display: inline-block; font-size: 0.8rem; line-height: 1.35; text-decoration: none; }
+.toc__list a:hover { text-decoration: underline; }
+.toc__title-text { font-weight: 600; }
+.toc__status     { font-weight: 500; opacity: 0.9; }
+
+/* (keeps your existing main list, status pill, separators, etc.) */
+
 
 /* Mobile: stack */
 @media (max-width: 980px) {
