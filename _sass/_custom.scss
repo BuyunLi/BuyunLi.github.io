@@ -185,4 +185,41 @@
   opacity: 0.85;
 }
 
+/* ----- Inline abstract toggle next to [...] ----- */
+.archive__item-excerpt details.abs {
+  display: inline;                 /* sit right after [...] */
+}
 
+/* style the "Show Full Abstract" summary like a blue link/button */
+.archive__item-excerpt details.abs > summary {
+  display: inline;
+  cursor: pointer;
+  color: #1a73e8;                  /* blue */
+  font-weight: 600;
+  margin-left: 0.35rem;            /* a little space after [...] */
+  padding: 0 .1rem;
+  border-radius: .2rem;
+}
+
+/* hover/focus feedback */
+.archive__item-excerpt details.abs > summary:hover,
+.archive__item-excerpt details.abs > summary:focus {
+  color: #0b57d0;                  /* darker blue on hover */
+  text-decoration: underline;
+  outline: none;
+}
+
+/* remove the default disclosure triangle */
+.archive__item-excerpt details.abs > summary::-webkit-details-marker { display: none; }
+.archive__item-excerpt details.abs > summary::marker { content: ""; }
+
+/* when opened, let the full text break onto a new line neatly */
+.archive__item-excerpt details.abs[open] {
+  display: block;                  /* moves content below the line with [...] */
+  margin-top: .4rem;
+}
+
+/* optional: add a small top margin to the first paragraph inside */
+.archive__item-excerpt details.abs[open] > p:first-of-type {
+  margin-top: .25rem;
+}
