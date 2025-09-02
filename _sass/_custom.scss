@@ -136,13 +136,13 @@
 
 /* TOC mini pill — scales with .toc--right's base font */
 .toc--right .pub__status--mini {
-  font-size: 0.78em;         /* smaller than before (relative to TOC base) */
+  font-size: 0.5em;         /* smaller than before (relative to TOC base) */
   padding: 0.10em 0.45em;
-  line-height: 1;
+  line-height: 0.8;
 }
 
 /* If you ever render fallback plain-text status in TOC */
 .toc--right .toc__status {
-  font-size: 0.9em;          /* smaller than title text */
+  font-size: 0.5em;          /* smaller than title text */
   opacity: 0.85;
 }
