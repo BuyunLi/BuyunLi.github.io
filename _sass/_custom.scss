@@ -146,3 +146,41 @@
   font-size: 0.5em;          /* smaller than title text */
   opacity: 0.85;
 }
+
+/* ===== Smaller paper titles + status (main list) ===== */
+#main.with-toc .archive__item-title {
+  font-size: 1.0rem !important;   /* ↓ shrink title */
+  line-height: 1.25;
+  margin: 0 0 0.25rem;
+  font-weight: 600;                /* keep some emphasis at smaller size */
+}
+
+#main.with-toc .pub__status {
+  font-size: 0.66rem !important;   /* ↓ smaller status pill text */
+  padding: 0.10em 0.44em !important;
+  line-height: 1;
+}
+
+/* ===== TOC: smaller titles, numbers, and pill ===== */
+#main.with-toc .toc--right {
+  font-size: 0.74rem !important;   /* ↓ overall TOC scale (titles + numbers) */
+  line-height: 1.28;
+}
+
+#main.with-toc .toc__title-text {
+  font-size: 1em !important;       /* inherit from .toc--right base */
+  font-weight: 600;
+}
+
+#main.with-toc .pub__status--mini {
+  font-size: 0.70em !important;    /* relative to .toc--right base */
+  padding: 0.08em 0.40em !important;
+  line-height: 1;
+}
+
+/* If you ever render plain-text status in TOC (fallback) */
+#main.with-toc .toc__status {
+  font-size: 0.9em !important;     /* slightly smaller than title text */
+  opacity: 0.85;
+}
+
