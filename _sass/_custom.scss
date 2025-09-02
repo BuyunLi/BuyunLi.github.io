@@ -1,18 +1,27 @@
-/* ====== Publications: 2-column layout (content | wider TOC) ====== */
-#main.with-toc {
-  display: grid !important;
-  grid-template-columns: minmax(0, 6.5fr) minmax(360px, 3.5fr); /* ~65% | ~35% (TOC wider) */
+/* ============================
+   3-COLUMN LAYOUT (Primer)
+   sidebar | content | right TOC
+   ============================ */
+
+#main.with-3col {
+  display: grid;
+  /* Slim photo sidebar, wide content, slim TOC */
+  grid-template-columns:
+    clamp(180px, 18vw, 220px)   /* LEFT sidebar */
+    minmax(0, 1fr)              /* MAIN content */
+    clamp(220px, 24vw, 280px);  /* RIGHT TOC */
   gap: 1.25rem;
   align-items: start;
   box-sizing: border-box;
+  max-width: 1200px;            /* keep overall page tidy */
+  margin-left: auto;
+  margin-right: auto;
 }
 
-/* Hide left sidebar on this page to keep it truly 2 columns */
-#main.with-toc > .sidebar { display: none !important; }
-
-/* Neutralize theme floats/widths inside this layout */
-#main.with-toc > .archive,
-#main.with-toc > .toc--right {
+/* Make sure theme floats/widths don't fight the grid */
+#main.with-3col > .sidebar,
+#main.with-3col > .archive,
+#main.with-3col > .toc--right {
   float: none !important;
   width: auto !important;
   max-width: none !important;
@@ -20,85 +29,120 @@
   min-width: 0;
 }
 
-/* Right column behavior */
-#main.with-toc > .archive { grid-column: 1; }
-#main.with-toc > .toc--right {
-  grid-column: 2;
-  justify-self: end;                /* hug the right edge */
+/* Column placement */
+#main.with-3col > .sidebar   { grid-column: 1; }
+#main.with-3col > .archive   { grid-column: 2; }
+#main.with-3col > .toc--right{
+  grid-column: 3;
   position: sticky;
   top: 6rem;
   max-height: calc(100vh - 6rem);
   overflow: auto;
   padding-left: 0.75rem;
   border-left: 1px solid #e0e0e0;
+  justify-self: end;           /* hug right edge */
 }
 
-/* ====== TOC typography: smaller, tidy, no ALL-CAPS ====== */
-.toc--right, .toc__title, .toc__list, .toc__list a,
+/* ============================
+   LEFT SIDEBAR (photo + info)
+   ============================ */
+.sidebar__avatar {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.08);
+  margin-bottom: .75rem;
+  object-fit: cover;
+}
+.sidebar__name {
+  font-size: 1rem;
+  margin: 0 0 .25rem;
+  font-weight: 700;
+}
+.sidebar__text { font-size: .9rem; line-height: 1.35; }
+.sidebar__contact a { font-size: .85rem; }
+
+/* ============================
+   TOC (right column)
+   - smaller, no all-caps
+   - numbers align with title
+   - status kept inline (not flushed right)
+   ============================ */
+.toc--right, .toc__title, .toc__section, .toc__list, .toc__list a,
 .toc__title-text, .toc__status, .toc__dash { text-transform: none !important; }
 
-/* Set a smaller base for the whole TOC (titles, numbers, links inherit) */
-.toc--right { font-size: 0.78rem; line-height: 1.3; }   /* tweak: 0.76–0.80rem if you like */
-
-.toc__title   { font-size: 1.0em; margin: 0.25rem 0 0.5rem; }  /* ≈ 0.78rem */
+.toc--right { font-size: 0.78rem; line-height: 1.3; }
+.toc__title   { font-size: 1.0em; margin: 0.25rem 0 0.5rem; }
 .toc__section { font-size: 0.95em; margin: 0.6rem 0 0.25rem; opacity: 0.85; }
 
-/* Keep numeric marker outside and aligned with the TITLE (not the pill) */
-.toc__list {
-  margin: 0;
-  padding-left: 1.2rem;                 /* space for 1., 2., … */
-  list-style: decimal outside;
-}
+.toc__list  { margin: 0; padding-left: 1.2rem; list-style: decimal outside; }
 .toc__list li { margin: 0 0 0.35rem; }
 
-/* Align title + pill on the same baseline; allow nice wrapping */
+/* Keep everything inline so status pill sits right after the title */
 .toc__list a {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 0.35rem;
-  font-size: 1em !important;            /* inherit from .toc--right */
+  display: inline;                /* inline keeps marker aligned to first line */
+  font-size: 1em;
   line-height: 1.28;
   text-decoration: none;
-  overflow-wrap: anywhere;               /* break long titles cleanly */
+  overflow-wrap: anywhere;
 }
 .toc__list a:hover { text-decoration: underline; }
 
 .toc__title-text { font-weight: 600; }
-.toc__dash       { opacity: 0.8; }
+.toc__dash { opacity: 0.8; }
 
-/* Mini status pill in TOC (matches main pill, just smaller) */
+/* Mini pill in TOC */
 .pub__status--mini {
-  display: inline-block;
-  font-size: 0.85em;                    /* scales with TOC base (≈ 0.66rem) */
+  display: inline;
+  font-size: 0.78em;
   font-weight: 700;
-  padding: 0.12em 0.5em;
+  padding: 0.10em 0.45em;
   border-radius: 999px;
   line-height: 1;
   background: #f1f3f5;
   color: #333;
   border: 1px solid #d0d5da;
-  vertical-align: baseline;
+  margin-left: .35rem;
 }
 
-/* ====== Main publication list (unchanged) ====== */
+/* ============================
+   MAIN CONTENT (middle)
+   ============================ */
+.pub__section {
+  margin: 1.6rem 0 0.75rem;
+  font-size: 1.05rem;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 0.25rem;
+}
 .archive .archive__item {
-  border-bottom: 2px solid #cfd8dc;
+  border-bottom: 2px solid #cfd8dc;  /* clearer separator */
   padding-bottom: 1rem;
   margin-bottom: 1.25rem;
 }
 .archive .archive__item:last-child { border-bottom: 0; }
 
+/* (Smaller) titles + meta */
+.archive__item-title {
+  font-size: 0.95rem;
+  line-height: 1.25;
+  margin: 0 0 0.25rem;
+  font-weight: 600;
+}
+.archive__item-meta { margin: 0; }
+
 .pub__meta { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0.35rem; }
 .pub__dash { opacity: 0.7; }
-.pub__venue { font-size: 0.95rem; color: #555; }
-.pub__year  { font-size: 0.95rem; color: #666; }
+.pub__venue { font-size: 0.92rem; color: #555; }
+.pub__year  { font-size: 0.92rem; color: #666; }
 .pub__dot   { color: #aaa; }
 
+/* Status pill (main list) */
 .pub__status {
   display: inline-block;
-  font-size: 0.78rem;
+  font-size: 0.66rem;
   font-weight: 700;
-  padding: 0.18em 0.6em;
+  padding: 0.10em 0.44em;
   border-radius: 999px;
   line-height: 1;
   background: #f1f3f5;
@@ -106,17 +150,57 @@
   border: 1px solid #d0d5da;
 }
 
-.pub__footer { margin-top: 0.5rem; display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
-.pub__link { font-weight: 600; text-decoration: none; border-bottom: 1px solid transparent; }
+/* Preprint link */
+.pub__footer {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.pub__link {
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
 .pub__link:hover { text-decoration: underline; }
 
-/* ====== Mobile: stack ====== */
+/* ============================
+   Inline "Show Full Abstract" button
+   ============================ */
+.archive__item-excerpt details.abs { display: inline; }
+.archive__item-excerpt details.abs > summary {
+  display: inline;
+  cursor: pointer;
+  color: #1a73e8;                  /* blue */
+  font-weight: 600;
+  margin-left: 0.35rem;
+  padding: 0 .1rem;
+  border-radius: .2rem;
+}
+.archive__item-excerpt details.abs > summary:hover,
+.archive__item-excerpt details.abs > summary:focus {
+  color: #0b57d0;
+  text-decoration: underline;
+  outline: none;
+}
+.archive__item-excerpt details.abs > summary::-webkit-details-marker { display: none; }
+.archive__item-excerpt details.abs > summary::marker { content: ""; }
+.archive__item-excerpt details.abs[open] { display: block; margin-top: .4rem; }
+.archive__item-excerpt details.abs[open] > p:first-of-type { margin-top: .25rem; }
+
+/* ============================
+   Global niceties
+   ============================ */
+html { scroll-behavior: smooth; }
+
 @media (max-width: 980px) {
-  #main.with-toc {
+  #main.with-3col {
     grid-template-columns: 1fr;
     gap: 1rem;
+    max-width: none;
   }
-  #main.with-toc > .toc--right {
+  #main.with-3col > .toc--right {
     border-left: 0;
     border-top: 1px solid #e0e0e0;
     padding-top: 1rem;
@@ -124,166 +208,3 @@
     justify-self: stretch;
   }
 }
-
-/* ===== Smaller status text (main list + TOC) ===== */
-
-/* Main list pill — smaller text + slightly tighter padding */
-.pub__status {
-  font-size: 0.70rem;        /* was ~0.78rem */
-  padding: 0.14em 0.50em;    /* slimmer pill */
-  line-height: 1;            /* keeps height compact */
-}
-
-/* TOC mini pill — scales with .toc--right's base font */
-.toc--right .pub__status--mini {
-  font-size: 0.5em;         /* smaller than before (relative to TOC base) */
-  padding: 0.10em 0.45em;
-  line-height: 0.8;
-}
-
-/* If you ever render fallback plain-text status in TOC */
-.toc--right .toc__status {
-  font-size: 0.5em;          /* smaller than title text */
-  opacity: 0.85;
-}
-
-/* ===== EXTRA-SMALL TITLES + STATUS (MAIN LIST) ===== */
-#main.with-toc .archive__item-title {
-  font-size: 0.90rem !important;   /* was 1.0rem */
-  line-height: 1.22;
-  margin: 0 0 0.2rem;
-  font-weight: 600;
-}
-
-#main.with-toc .pub__status {
-  font-size: 0.60rem !important;   /* was ~0.66–0.70rem */
-  padding: 0.08em 0.36em !important;
-  line-height: 1;
-}
-
-/* ===== EXTRA-SMALL TOC (titles + numbers + pill) ===== */
-#main.with-toc .toc--right {
-  font-size: 0.68rem !important;   /* was ~0.74–0.78rem */
-  line-height: 1.25;
-}
-
-#main.with-toc .toc__title-text {
-  font-size: 1em !important;       /* inherit from .toc--right */
-  font-weight: 600;
-}
-
-/* mini status pill in TOC */
-#main.with-toc .pub__status--mini {
-  font-size: 0.62em !important;    /* smaller, relative to TOC base */
-  padding: 0.06em 0.34em !important;
-  line-height: 1;
-}
-
-/* fallback: plain-text status in TOC */
-#main.with-toc .toc__status {
-  font-size: 0.85em !important;
-  opacity: 0.85;
-}
-
-/* ----- Inline abstract toggle next to [...] ----- */
-.archive__item-excerpt details.abs {
-  display: inline;                 /* sit right after [...] */
-}
-
-/* style the "Show Full Abstract" summary like a blue link/button */
-.archive__item-excerpt details.abs > summary {
-  display: inline;
-  cursor: pointer;
-  color: #1a73e8;                  /* blue */
-  font-weight: 600;
-  margin-left: 0.35rem;            /* a little space after [...] */
-  padding: 0 .1rem;
-  border-radius: .2rem;
-}
-
-/* hover/focus feedback */
-.archive__item-excerpt details.abs > summary:hover,
-.archive__item-excerpt details.abs > summary:focus {
-  color: #0b57d0;                  /* darker blue on hover */
-  text-decoration: underline;
-  outline: none;
-}
-
-/* remove the default disclosure triangle */
-.archive__item-excerpt details.abs > summary::-webkit-details-marker { display: none; }
-.archive__item-excerpt details.abs > summary::marker { content: ""; }
-
-/* when opened, let the full text break onto a new line neatly */
-.archive__item-excerpt details.abs[open] {
-  display: block;                  /* moves content below the line with [...] */
-  margin-top: .4rem;
-}
-
-/* optional: add a small top margin to the first paragraph inside */
-.archive__item-excerpt details.abs[open] > p:first-of-type {
-  margin-top: .25rem;
-}
-
-/* ================================
-   1) Keep TOC status inline at end
-   ================================ */
-
-/* Make each TOC link render inline so nothing pushes the status to the right */
-#main.with-toc .toc__list a {
-  display: inline !important;        /* override any inline-flex/block from earlier */
-  white-space: normal;
-}
-
-/* Ensure the status is not floated right by the theme */
-#main.with-toc .toc--right .pub__status--mini,
-#main.with-toc .toc--right .toc__status {
-  float: none !important;
-  display: inline !important;
-  margin-left: 0.35rem;              /* small gap after the title/dash */
-  vertical-align: baseline;
-}
-
-/* Keep list markers aligned with the title line */
-#main.with-toc .toc__list {
-  list-style: decimal outside;
-  padding-left: 1.1rem;
-}
-
-/* Optional: if you use a dash before the pill, keep it inline too */
-#main.with-toc .toc__dash { display: inline; opacity: 0.8; }
-
-/* ================================
-   2) Narrow the page + TOC column
-   ================================ */
-
-/* Constrain the overall width of the publications page and center it */
-#main.with-toc {
-  max-width: 1080px;                 /* ← make page narrower; tweak to taste (e.g., 1040–1160px) */
-  margin-left: auto;
-  margin-right: auto;
-
-  /* Keep your 2-column grid but give the TOC a slightly smaller share */
-  grid-template-columns: minmax(0, 6fr) minmax(240px, 2.3fr);  /* ~70% / ~23–25% */
-  gap: 1rem;                         /* a bit tighter gap so layout feels cleaner */
-}
-
-/* Sticky, slim TOC */
-#main.with-toc > .toc--right {
-  max-width: 300px;                  /* hard cap so TOC can’t bloat */
-  padding-left: 0.5rem;
-  border-left: 1px solid #e0e0e0;
-  position: sticky;
-  top: 6rem;
-}
-
-/* Mobile: unchanged stack */
-@media (max-width: 980px) {
-  #main.with-toc { max-width: none; grid-template-columns: 1fr; gap: 1rem; }
-  #main.with-toc > .toc--right {
-    border-left: 0;
-    border-top: 1px solid #e0e0e0;
-    padding-top: 1rem;
-    max-width: none;
-  }
-}
-
