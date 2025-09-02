@@ -2,70 +2,40 @@
 layout: default
 ---
 
-{%- assign all = site.teaching -%}
-{%- assign ranked   = all | where_exp: "t", "t.rank" | sort: "rank" -%}
-{%- assign unranked = all | where_exp: "t", "t.rank == nil" | sort: "title" -%}
-{%- assign items    = ranked | concat: unranked -%}
+{%- assign items = site.teaching | sort: "title" -%}
 
-<div id="main" role="main" class="teach-index">
-  <!-- LEFT: simple author card (Primer-compatible, no includes) -->
-  <aside class="sidebar">
-    {%- assign avatar = site.author.avatar -%}
-    {%- if avatar -%}
-      <img class="sidebar__avatar" src="{{ avatar | relative_url }}" alt="{{ site.author.name | default: site.title }}">
+<h1>{{ page.title | default: "Teaching" }}</h1>
+
+<ul style="list-style:none; padding:0; margin:0;">
+  {%- for c in items -%}
+  <li style="border-bottom:1px solid #e5e7eb; padding:0.75rem 0; margin:0;">
+    <h2 style="margin:0 0 .25rem; font-size:1.05rem;">
+      {%- if c.url -%}
+        <a href="{{ c.url | relative_url }}" style="text-decoration:none;">{{ c.title }}</a>
+      {%- else -%}
+        {{ c.title }}
+      {%- endif -%}
+    </h2>
+
+    <p style="margin:.1rem 0; color:#444;">
+      {%- if c.type -%}<strong>{{ c.type }}</strong>{%- endif -%}
+      {%- if c.venue -%}{% if c.type %} — {% endif %}<em>{{ c.venue }}</em>{%- endif -%}
+      {%- if c.date -%} · {{ c.date }}{%- endif -%}
+      {%- if c.location -%} · {{ c.location }}{%- endif -%}
+    </p>
+
+    {%- if c.eval_overall or c.eval_support or c.eval_materials or c.eval_enrollment -%}
+    <p style="margin:.1rem 0; color:#555;">
+      {%- if c.eval_overall -%}Overall: {{ c.eval_overall }}{%- endif -%}
+      {%- if c.eval_support -%}{% if c.eval_overall %} · {% endif %}Support: {{ c.eval_support }}{%- endif -%}
+      {%- if c.eval_materials -%}{% if c.eval_overall or c.eval_support %} · {% endif %}Materials: {{ c.eval_materials }}{%- endif -%}
+      {%- if c.eval_enrollment -%}{% if c.eval_overall or c.eval_support or c.eval_materials %} · {% endif %}Enrollment: {{ c.eval_enrollment }}{%- endif -%}
+    </p>
     {%- endif -%}
-    <div class="sidebar__bio">
-      <h2 class="sidebar__name">{{ site.author.name | default: site.title }}</h2>
-      {%- if site.author.bio -%}
-        <div class="sidebar__text">{{ site.author.bio }}</div>
-      {%- endif -%}
-      {%- if site.author.email -%}
-        <div class="sidebar__contact"><a href="mailto:{{ site.author.email }}">{{ site.author.email }}</a></div>
-      {%- endif -%}
-    </div>
-  </aside>
 
-  <!-- RIGHT: teaching list -->
-  <div class="archive">
-    <h1 class="page__title">{{ page.title | default: "Teaching" }}</h1>
-
-    <div class="archive__content">
-      {%- for post in items -%}
-        {%- assign anchor_id = post.slug | default: post.title | slugify -%}
-        <article id="teach-{{ anchor_id }}" class="teach__item">
-          <h2 class="teach__title">{{ post.title }}</h2>
-
-          <p class="teach__meta">
-            {%- if post.type -%}<span class="teach__badge">{{ post.type }}</span>{%- endif -%}
-            {%- if post.venue -%}<span class="teach__sep"> — </span><span class="teach__venue"><em>{{ post.venue }}</em></span>{%- endif -%}
-            {%- if post.date -%}<span class="teach__dot"> · </span><span class="teach__date">{{ post.date }}</span>{%- endif -%}
-            {%- if post.location -%}<span class="teach__dot"> · </span><span class="teach__loc">{{ post.location }}</span>{%- endif -%}
-          </p>
-
-          {%- if post.eval_overall or post.eval_support or post.eval_materials or post.eval_enrollment -%}
-            <p class="teach__evals">
-              {%- if post.eval_overall -%}
-                <span class="teach__chip"><span class="teach__lbl">Overall</span> {{ post.eval_overall }}</span>
-              {%- endif -%}
-              {%- if post.eval_support -%}
-                <span class="teach__chip"><span class="teach__lbl">Support</span> {{ post.eval_support }}</span>
-              {%- endif -%}
-              {%- if post.eval_materials -%}
-                <span class="teach__chip"><span class="teach__lbl">Materials</span> {{ post.eval_materials }}</span>
-              {%- endif -%}
-              {%- if post.eval_enrollment -%}
-                <span class="teach__chip"><span class="teach__lbl">Enrollment</span> {{ post.eval_enrollment }}</span>
-              {%- endif -%}
-            </p>
-          {%- endif -%}
-
-          {%- if post.content and post.content != "" -%}
-            <div class="teach__body">
-              {{ post.content }}
-            </div>
-          {%- endif -%}
-        </article>
-      {%- endfor -%}
-    </div>
-  </div>
-</div>
+    {%- if c.excerpt -%}
+    <p style="margin:.35rem 0 0; color:#333;">{{ c.excerpt }}</p>
+    {%- endif -%}
+  </li>
+  {%- endfor -%}
+</ul>
