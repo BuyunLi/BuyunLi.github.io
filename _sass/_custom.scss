@@ -1,95 +1,66 @@
-/* =========================================================
-   GRID: MAIN content | slim right TOC  (no left sidebar)
-   ========================================================= */
+/* --- Layout: three columns (sidebar | content | right TOC) --- */
 #main.with-toc {
   display: grid;
-  grid-template-columns:
-    minmax(0, 1fr)              /* MAIN content */
-    clamp(140px, 16vw, 200px);  /* right TOC (slim) */
-  gap: 1.25rem;
+  grid-template-columns: minmax(240px, 320px) 1fr minmax(280px, 380px); /* a bit wider TOC */
+  gap: 2rem;
   align-items: start;
 }
-
-/* Ensure children can shrink properly */
-#main.with-toc > .archive,
-#main.with-toc > .toc--right { min-width: 0; }
-
-#main.with-toc > .archive { grid-column: 1; }
+#main.with-toc > .sidebar { grid-column: 1; }
+#main.with-toc > .archive { grid-column: 2; }
 #main.with-toc > .toc--right {
-  grid-column: 2;
-  justify-self: end;                /* hug the right edge */
+  grid-column: 3;
   position: sticky;
-  top: 6rem;                        /* adjust if your header differs */
+  top: 6rem;
   max-height: calc(100vh - 6rem);
   overflow: auto;
-  padding-left: 0.5rem;
+  padding-left: 1rem;
   border-left: 1px solid #e0e0e0;
-  width: 100%;
-  max-width: 200px;                 /* hard cap TOC width */
 }
 
+/* Mobile: stack */
 @media (max-width: 980px) {
-  #main.with-toc {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
+  #main.with-toc { grid-template-columns: 1fr; }
+  #main.with-toc > .sidebar,
   #main.with-toc > .archive,
-  #main.with-toc > .toc--right {
-    grid-column: 1;
-    max-width: none;
-    justify-self: stretch;
-  }
+  #main.with-toc > .toc--right { grid-column: 1; }
   #main.with-toc > .toc--right {
     border-left: 0;
     border-top: 1px solid #e0e0e0;
+    margin-top: 1rem;
     padding-top: 1rem;
   }
 }
 
-/* Smooth anchor scrolling */
+/* Smooth scrolling */
 html { scroll-behavior: smooth; }
 
-/* =========================================================
-   TOC TYPOGRAPHY: smaller + not uppercased
-   ========================================================= */
-.toc--right, .toc__title, .toc__section, .toc__list, .toc__list a,
-.toc__title-text, .toc__status {
-  text-transform: none !important;  /* override any ALL CAPS */
+/* --- TOC styles: not uppercased, include status --- */
+.toc--right, .toc__title, .toc__list, .toc__list a {
+  text-transform: none !important; /* ensure no ALL CAPS */
 }
-
-.toc__title   { font-size: 0.9rem;  margin: 0.25rem 0 0.5rem; }
-.toc__section { font-size: 0.8rem;  margin: 0.6rem 0 0.25rem; opacity: 0.85; }
-.toc__list    { margin: 0; padding-left: 1rem; list-style: decimal; }
-.toc__list a  { display: inline-block; text-decoration: none; font-size: 0.8rem; line-height: 1.35; }
+.toc__title { font-size: 1rem; margin: 0.25rem 0 0.5rem; }
+.toc__list { margin: 0; padding-left: 1rem; list-style: decimal; }
+.toc__list a { text-decoration: none; display: inline-block; }
 .toc__list a:hover { text-decoration: underline; }
 .toc__title-text { font-weight: 600; }
-.toc__status     { font-weight: 500; opacity: 0.9; }
+.toc__status { font-weight: 500; opacity: 0.85; }
 
-/* =========================================================
-   MAIN CONTENT: sections, items, separators
-   ========================================================= */
-.pub__section {
-  margin: 1.75rem 0 0.75rem;
-  font-size: 1.15rem;
-  border-bottom: 1px solid #e5e7eb;
-  padding-bottom: 0.25rem;
-}
-
+/* --- Publication item styling --- */
 .archive .archive__item {
-  border-bottom: 2px solid #cfd8dc; /* clearer separation */
+  border-bottom: 2px solid #cfd8dc; /* clearer separator */
   padding-bottom: 1rem;
   margin-bottom: 1.25rem;
 }
 .archive .archive__item:last-child { border-bottom: 0; }
 
-/* Meta row: [status pill] — [venue small] · [year] */
+/* Meta row: status pill — venue (smaller) — year */
 .pub__meta { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0.35rem; }
 .pub__dash { opacity: 0.7; }
 .pub__venue { font-size: 0.95rem; color: #555; }
 .pub__year  { font-size: 0.95rem; color: #666; }
 .pub__dot   { color: #aaa; }
 
-/* Status pill (neutral) */
+/* Status pill (neutral look) */
 .pub__status {
   display: inline-block;
   font-size: 0.78rem;
@@ -102,7 +73,7 @@ html { scroll-behavior: smooth; }
   border: 1px solid #d0d5da;
 }
 
-/* Footer (preprint link) */
+/* Footer (for Preprint link) */
 .pub__footer {
   margin-top: 0.5rem;
   display: flex;
