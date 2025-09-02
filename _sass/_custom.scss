@@ -1,7 +1,7 @@
 /* --- Layout: three columns (sidebar | content | right TOC) --- */
 #main.with-toc {
   display: grid;
-  grid-template-columns: minmax(240px, 320px) 1fr minmax(280px, 380px); /* a bit wider TOC */
+  grid-template-columns: minmax(220px, 300px) 1fr minmax(220px, 320px); /* a bit wider TOC */
   gap: 2rem;
   align-items: start;
 }
