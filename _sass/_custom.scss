@@ -104,25 +104,49 @@ html { scroll-behavior: smooth; }
 }
 .pub__link:hover { text-decoration: underline; }
 
-/* ===== Slimmer side columns (sidebar + TOC) ===== */
-/* Old: minmax(220px, 300px) 1fr minmax(220px, 320px) */
+/* ======= FORCE slimmer sidebar + TOC on publications page ======= */
 #main.with-toc {
+  display: grid !important;
   grid-template-columns:
-    clamp(140px, 15vw, 190px)   /* LEFT sidebar — was up to 300px */
-    minmax(0, 1fr)              /* MAIN content (grows more now) */
-    clamp(160px, 18vw, 220px);  /* RIGHT TOC — was up to 320px */
-  gap: 1.25rem;                  /* slightly tighter gap */
-  max-width: 1180px;             /* optional: keep overall page tidy */
+    150px                 /* LEFT sidebar (fixed, slimmer) */
+    minmax(0, 1fr)        /* MAIN content */
+    200px                 /* RIGHT TOC (fixed, slimmer) */
+    !important;
+  gap: 1.25rem !important;
+  max-width: 1180px;      /* keep page from stretching too wide */
   margin-left: auto;
   margin-right: auto;
 }
 
-/* Keep columns from stretching wider than intended */
-#main.with-toc > .toc--right { max-width: 220px; padding-left: 0.75rem; }
-#main.with-toc > .sidebar    { max-width: 190px; }
+/* Prevent theme styles from widening the side columns */
+#main.with-toc > .sidebar,
+#main.with-toc > .toc--right {
+  width: auto !important;
+  max-width: initial !important;
+  min-width: 0 !important;
+}
 
-/* Make sure nothing inside forces the columns wider */
+/* Extra caps to ensure nothing inside forces a wider column */
+#main.with-toc > .sidebar { max-width: 150px !important; }
+#main.with-toc > .toc--right {
+  max-width: 200px !important;
+  padding-left: 0.75rem !important;
+}
+
+/* Keep grid from being overridden by floats or max-widths */
 #main.with-toc > .sidebar,
 #main.with-toc > .archive,
-#main.with-toc > .toc--right { min-width: 0; }
+#main.with-toc > .toc--right {
+  float: none !important;
+  max-width: none;  /* allowed to shrink due to explicit caps above */
+}
+
+/* Mobile: stack */
+@media (max-width: 980px) {
+  #main.with-toc {
+    grid-template-columns: 1fr !important;
+    max-width: none;
+  }
+}
+
 
