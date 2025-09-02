@@ -292,6 +292,14 @@ plugins:
   - jekyll-sitemap
   - jekyll-feed
   - jemoji
+  - jekyll-seo-tag
+  - jekyll-gist
+  - jekyll-redirect-from
+  - jekyll-relative-links
+  - jekyll-optional-front-matter
+  - jekyll-readme-index
+  - jekyll-default-layout
+  - jekyll-titles-from-headings
 whitelist:
   - jekyll-paginate
   - jekyll-sitemap
