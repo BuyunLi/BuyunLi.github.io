@@ -1,0 +1,63 @@
+---
+layout: default
+---
+
+{% if page.header.overlay_color or page.header.overlay_image or page.header.image %}
+  {% include page__hero.html %}
+{% endif %}
+
+{% if page.url != "/" and site.breadcrumbs %}
+  {% unless paginator %}
+    {% include breadcrumbs.html %}
+  {% endunless %}
+{% endif %}
+
+<div id="main" role="main" class="with-teach">
+  <aside class="sidebar">
+    {% include author-profile.html %}
+  </aside>
+
+  <article class="archive teach">
+    {% unless page.header.overlay_color or page.header.overlay_image %}
+      <h1 class="page__title">{{ page.title }}</h1>
+    {% endunless %}
+
+    <header class="teach__header">
+      <p class="teach__meta">
+        {% if page.type %}<span class="teach__badge">{{ page.type }}</span>{% endif %}
+        {% if page.venue %}<span class="teach__sep">—</span> <span class="teach__venue"><em>{{ page.venue }}</em></span>{% endif %}
+        {% if page.date %}<span class="teach__dot"> · </span><span class="teach__date">{{ page.date }}</span>{% endif %}
+        {% if page.location %}<span class="teach__dot"> · </span><span class="teach__loc">{{ page.location }}</span>{% endif %}
+      </p>
+
+      {% if page.eval_overall or page.eval_support or page.eval_materials or page.eval_enrollment %}
+      <div class="teach__evals">
+        {% if page.eval_overall %}
+          <div class="teach__eval"><span class="teach__label">Overall</span><span class="teach__score">{{ page.eval_overall }}</span></div>
+        {% endif %}
+        {% if page.eval_support %}
+          <div class="teach__eval"><span class="teach__label">Support</span><span class="teach__score">{{ page.eval_support }}</span></div>
+        {% endif %}
+        {% if page.eval_materials %}
+          <div class="teach__eval"><span class="teach__label">Materials</span><span class="teach__score">{{ page.eval_materials }}</span></div>
+        {% endif %}
+        {% if page.eval_enrollment %}
+          <div class="teach__eval"><span class="teach__label">Enrollment</span><span class="teach__score">{{ page.eval_enrollment }}</span></div>
+        {% endif %}
+      </div>
+      {% endif %}
+
+      {% if page.syllabus_url or page.canvas_url or page.site_url %}
+      <p class="teach__links">
+        {% if page.syllabus_url %}<a class="teach__link" href="{{ page.syllabus_url }}" target="_blank" rel="noopener">📄 Syllabus</a>{% endif %}
+        {% if page.canvas_url %}<a class="teach__link" href="{{ page.canvas_url }}" target="_blank" rel="noopener">🖥️ Canvas</a>{% endif %}
+        {% if page.site_url %}<a class="teach__link" href="{{ page.site_url }}" target="_blank" rel="noopener">🔗 Course Site</a>{% endif %}
+      </p>
+      {% endif %}
+    </header>
+
+    <div class="archive__content">
+      {{ content }}
+    </div>
+  </article>
+</div>
