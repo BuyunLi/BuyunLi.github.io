@@ -1,10 +1,25 @@
-/* --- Layout: three columns (sidebar | content | right TOC) --- */
+/* ===============================
+   3 columns: sidebar | content | TOC
+   =============================== */
 #main.with-toc {
   display: grid;
-  grid-template-columns: minmax(220px, 300px) 1fr minmax(220px, 320px); /* a bit wider TOC */
+  grid-template-columns: minmax(220px, 300px) 1fr minmax(220px, 320px);
   gap: 2rem;
   align-items: start;
+  box-sizing: border-box;
 }
+
+/* Make sure theme floats/widths don’t override our grid on this page */
+#main.with-toc > .sidebar,
+#main.with-toc > .archive,
+#main.with-toc > .toc--right {
+  float: none !important;
+  width: auto !important;
+  max-width: none !important;
+  margin: 0 !important;
+  min-width: 0;
+}
+
 #main.with-toc > .sidebar { grid-column: 1; }
 #main.with-toc > .archive { grid-column: 2; }
 #main.with-toc > .toc--right {
@@ -28,6 +43,7 @@
     border-top: 1px solid #e0e0e0;
     margin-top: 1rem;
     padding-top: 1rem;
+    max-height: none;
   }
 }
 
@@ -36,10 +52,10 @@ html { scroll-behavior: smooth; }
 
 /* --- TOC styles: not uppercased, include status --- */
 .toc--right, .toc__title, .toc__list, .toc__list a {
-  text-transform: none !important; /* ensure no ALL CAPS */
+  text-transform: none !important;
 }
 .toc__title { font-size: 1rem; margin: 0.25rem 0 0.5rem; }
-.toc__list { margin: 0; padding-left: 1rem; list-style: decimal; }
+.toc__list  { margin: 0; padding-left: 1rem; list-style: decimal; }
 .toc__list a { text-decoration: none; display: inline-block; }
 .toc__list a:hover { text-decoration: underline; }
 .toc__title-text { font-weight: 600; }
@@ -47,7 +63,7 @@ html { scroll-behavior: smooth; }
 
 /* --- Publication item styling --- */
 .archive .archive__item {
-  border-bottom: 2px solid #cfd8dc; /* clearer separator */
+  border-bottom: 2px solid #cfd8dc;
   padding-bottom: 1rem;
   margin-bottom: 1.25rem;
 }
