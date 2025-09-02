@@ -15,10 +15,7 @@ layout: default
 {%- assign items = site.publications | sort: "year" | reverse -%}
 
 <div id="main" role="main" class="with-toc">
-  {%- comment -%}
-  IMPORTANT: include the author profile directly to guarantee the left card shows
-  in this custom layout.
-  {%- endcomment -%}
+  {%- comment -%} Render the author card explicitly so the photo shows {%- endcomment -%}
   <aside class="sidebar">
     {% include author-profile.html %}
   </aside>
@@ -108,7 +105,8 @@ layout: default
             <a href="#pub-{{ anchor_id }}">
               <span class="toc__title-text">{{ post.title }}</span>
               {%- if post.status -%}
-                <span class="toc__status"> — {{ status_label | strip }}</span>
+                <span class="toc__dash"> — </span>
+                <span class="pub__status pub__status--mini">{{ status_label | strip }}</span>
               {%- endif -%}
             </a>
           </li>
