@@ -1,20 +1,21 @@
 ---
-title: "BUS-K303 Technology & Business Analytics"
+title: "BUS-K303 Technology & Business Analytics "
 collection: teaching
 type: "Undergraduate course"
+permalink: /teaching/2014-spring-teaching-1
 venue: "Indiana University"
-date: "Fall 2023; Spring 2024; Fall 2025 (Two sections)"
+date: 2023-08-27- Present
 location: "Bloomington, USA"
-
-# Optional quick stats (show as chips if present)
-eval_overall: "6.9/7"
-eval_support: "6.8/7"
-eval_materials: "6.9/7"
-eval_enrollment: 49/87
-
-# Optional quick links
-# syllabus_url: /files/K303_Syllabus.pdf
-# canvas_url: https://canvas.iu.edu/...
-# site_url: https://example.com/k303
 ---
 
+Designed the course material, assignments, exams, and reading list along with the Canvas interface. Organized
+TA and Peer Tutor orientation and task assignment.
+
+Course Organization
+======
+Designed the course material, assignments, exams and reading list along with the Canvas interface. Organized
+TA and Peer Tutor orientation and task assignment.
+
+Evaluation
+======
+6.9/7 for overall instructor evaluation, 6.8/7 for supports offered to students, 6.9 for the material preparation.
