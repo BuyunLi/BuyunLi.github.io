@@ -6,7 +6,7 @@
 /* Force a clean 2-col grid on pages using this layout */
 #main.with-toc {
   display: grid !important;
-  grid-template-columns: minmax(0, 7fr) minmax(300px, 3fr); /* ≈ 70% / 25% */
+  grid-template-columns: minmax(0, 7fr) minmax(300px, 4fr); /* ≈ 70% / 25% */
   gap: 1.25rem;
   align-items: start;
   box-sizing: border-box;
