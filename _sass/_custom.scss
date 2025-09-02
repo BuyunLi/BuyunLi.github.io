@@ -1,54 +1,46 @@
 /* ============================
-   FORCE a clean 3-column layout
+   Publications: 2-column layout
+   content (~70%) | TOC (~25%)
    ============================ */
+
+/* Force a clean 2-col grid on pages using this layout */
 #main.with-toc {
-  /* win over any theme flex/floats */
   display: grid !important;
-  grid-template-areas: "sidebar content toc";
-  /* ~15% | 70% | ~15% with sane min/max */
-  grid-template-columns:
-    clamp(140px, 15%, 200px)   /* sidebar */
-    minmax(0, 70%)             /* main content */
-    clamp(120px, 15%, 180px);  /* right TOC */
+  grid-template-columns: minmax(0, 7fr) minmax(0, 2.5fr); /* ≈ 70% / 25% */
   gap: 1.25rem;
   align-items: start;
   box-sizing: border-box;
 }
 
-/* Neutralize theme floats/widths INSIDE this page only */
-#main.with-toc > .sidebar,
+/* Hide the left sidebar on this page to truly have 2 columns */
+#main.with-toc > .sidebar { display: none !important; }
+
+/* Neutralize theme floats/widths inside this page */
 #main.with-toc > .archive,
 #main.with-toc > .toc--right {
   float: none !important;
   width: auto !important;
   max-width: none !important;
   margin: 0 !important;
-  min-width: 0;                /* allow shrinking in grid */
+  min-width: 0; /* allow shrink in grid */
 }
 
-/* Map children to grid areas explicitly */
-#main.with-toc > .sidebar,
-#main.with-toc > .sidebar.sticky { grid-area: sidebar; }
-
-#main.with-toc > .archive { grid-area: content; }
-
+/* Place the two columns */
+#main.with-toc > .archive { grid-column: 1; }
 #main.with-toc > .toc--right {
-  grid-area: toc;
+  grid-column: 2;
   position: sticky;
   top: 6rem;
   max-height: calc(100vh - 6rem);
   overflow: auto;
   padding-left: 0.5rem;
   border-left: 1px solid #e0e0e0;
-  justify-self: end;           /* hug right edge */
-  /* hard cap so TOC can’t push center narrower */
-  max-width: 180px;
+  justify-self: end;         /* hug right edge */
 }
 
-/* ==============  Mobile: stack  ============== */
+/* Mobile: stack */
 @media (max-width: 980px) {
   #main.with-toc {
-    grid-template-areas: "content" "sidebar" "toc";
     grid-template-columns: 1fr;
     gap: 1rem;
   }
@@ -62,21 +54,24 @@
 }
 
 /* ============================
-   TOC: number aligns with title
+   TOC: number aligns with title,
+   smaller text, no ALL CAPS
    ============================ */
 .toc--right, .toc__title, .toc__list, .toc__list a,
-.toc__title-text, .toc__status, .toc__dash { text-transform: none !important; }
+.toc__title-text, .toc__status, .toc__dash {
+  text-transform: none !important;
+}
 
 .toc__title { font-size: 0.95rem; margin: 0.25rem 0 0.5rem; }
 
-/* keep list marker outside, aligned with first line (title) */
+/* Keep numeric marker outside, aligned with first line (title) */
 .toc__list {
   margin: 0;
-  padding-left: 1.1rem;
+  padding-left: 1.1rem;      /* space for 1., 2., … */
   list-style: decimal outside;
 }
 
-/* make the link inline-flex and baseline-aligned so the number aligns to the TITLE */
+/* Align title + pill on one baseline so marker aligns to title */
 .toc__list a {
   display: inline-flex;
   align-items: baseline;
@@ -91,7 +86,7 @@
 .toc__title-text { font-weight: 600; }
 .toc__dash       { opacity: 0.8; }
 
-/* mini status pill in TOC (matches main pill style) */
+/* Mini status pill in TOC, matching main pill styling */
 .pub__status--mini {
   display: inline-block;
   font-size: 0.72rem;
@@ -106,7 +101,7 @@
 }
 
 /* ============================
-   Main publication list (as before)
+   (Your existing main list styles)
    ============================ */
 .archive .archive__item {
   border-bottom: 2px solid #cfd8dc;
@@ -140,5 +135,9 @@
   align-items: center;
   flex-wrap: wrap;
 }
-.pub__link { font-weight: 600; text-decoration: none; border-bottom: 1px solid transparent; }
+.pub__link {
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
 .pub__link:hover { text-decoration: underline; }
