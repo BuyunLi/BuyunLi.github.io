@@ -7,6 +7,79 @@ author_profile: true
 
 {% include base_path %}
 
-{% for post in site.teaching reversed %}
+<h2>Teaching</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Semester</th>
+      <th>Course</th>
+      <th>Role</th>
+      <th>Evaluation</th>
+      <th>Location</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% assign posts = site.teaching | sort: "date" | reverse %}
+    {% for post in posts %}
+      {% if post.semesters %}
+        {%- comment -%}
+          Multi-semester entries: iterate each term.
+          Expected front matter:
+          semesters:
+            - semester: "Fall 2023"
+              role: "Instructor"
+              evaluation: "6.9/7 overall..."
+              location: "Bloomington, Indiana"
+        {%- endcomment -%}
+        {% for term in post.semesters %}
+        <tr>
+          <td>{{ term.semester | default: post.location | default: post.date | date: "%B %Y" }}</td>
+          <td>
+            <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+            {% if post.venue %}<br><small>{{ post.venue }}</small>{% endif %}
+          </td>
+          <td>{{ term.role | default: post.role | default: "—" }}</td>
+          <td>{{ term.evaluation | default: post.evaluation | default: "—" }}</td>
+          <td>{{ term.location | default: post.location | default: "—" }}</td>
+        </tr>
+        {% endfor %}
+      {% else %}
+        {%- comment -%}
+          Single-semester (legacy) entries: use top-level fields.
+          You can still add `role:` and `evaluation:` at the top level if desired.
+        {%- endcomment -%}
+        <tr>
+          <td>
+            {%- if post.semester -%}
+              {{ post.semester }}
+            {%- elsif post.location -%}
+              {{ post.location }}
+            {%- elsif post.date -%}
+              {{ post.date | date: "%B %Y" }}
+            {%- else -%}
+              —
+            {%- endif -%}
+          </td>
+          <td>
+            <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+            {% if post.venue %}<br><small>{{ post.venue }}</small>{% endif %}
+          </td>
+          <td>{{ post.role | default: "—" }}</td>
+          <td>{{ post.evaluation | default: "—" }}</td>
+          <td>{{ post.location | default: "—" }}</td>
+        </tr>
+      {% endif %}
+    {% endfor %}
+  </tbody>
+</table>
+
+{%- comment -%}
+  Optional: keep the original archive list below the table.
+  Remove this block if you only want the table.
+{%- endcomment -%}
+<hr>
+{% for post in posts %}
   {% include archive-single.html %}
 {% endfor %}
+
