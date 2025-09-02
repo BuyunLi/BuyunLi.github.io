@@ -1,34 +1,31 @@
 /* =========================================================
-   LAYOUT GRID: sidebar | MAIN | slim right TOC
+   GRID: MAIN content | slim right TOC  (no left sidebar)
    ========================================================= */
 #main.with-toc {
   display: grid;
   grid-template-columns:
-    clamp(180px, 22vw, 240px)   /* left sidebar */
     minmax(0, 1fr)              /* MAIN content */
-    clamp(140px, 14vw, 180px);  /* right TOC (slim) */
+    clamp(140px, 16vw, 200px);  /* right TOC (slim) */
   gap: 1.25rem;
   align-items: start;
 }
 
-/* Make sure grid children can shrink properly */
+/* Ensure children can shrink properly */
 #main.with-toc > .archive,
-#main.with-toc > .sidebar,
 #main.with-toc > .toc--right { min-width: 0; }
 
-#main.with-toc > .sidebar { grid-column: 1; }
-#main.with-toc > .archive { grid-column: 2; }
+#main.with-toc > .archive { grid-column: 1; }
 #main.with-toc > .toc--right {
-  grid-column: 3;
+  grid-column: 2;
   justify-self: end;                /* hug the right edge */
   position: sticky;
-  top: 6rem;                        /* adjust to your header */
+  top: 6rem;                        /* adjust if your header differs */
   max-height: calc(100vh - 6rem);
   overflow: auto;
-  padding-left: 0.5rem;             /* slimmer feel */
+  padding-left: 0.5rem;
   border-left: 1px solid #e0e0e0;
   width: 100%;
-  max-width: 180px;                 /* hard cap TOC width */
+  max-width: 200px;                 /* hard cap TOC width */
 }
 
 @media (max-width: 980px) {
@@ -36,7 +33,6 @@
     grid-template-columns: 1fr;
     gap: 1rem;
   }
-  #main.with-toc > .sidebar,
   #main.with-toc > .archive,
   #main.with-toc > .toc--right {
     grid-column: 1;
@@ -58,7 +54,7 @@ html { scroll-behavior: smooth; }
    ========================================================= */
 .toc--right, .toc__title, .toc__section, .toc__list, .toc__list a,
 .toc__title-text, .toc__status {
-  text-transform: none !important;  /* kill ALL CAPS */
+  text-transform: none !important;  /* override any ALL CAPS */
 }
 
 .toc__title   { font-size: 0.9rem;  margin: 0.25rem 0 0.5rem; }
