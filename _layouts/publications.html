@@ -2,37 +2,26 @@
 layout: default
 ---
 
-{% if page.header.overlay_color or page.header.overlay_image or page.header.image %}
-  {% include page__hero.html %}
-{% endif %}
-
-{% if page.url != "/" and site.breadcrumbs %}
-  {% unless paginator %}
-    {% include breadcrumbs.html %}
-  {% endunless %}
-{% endif %}
-
 {%- comment -%}
-Order all publications by year (newest first), then split into:
-- main_items: everything EXCEPT work_in_progress
-- wip: only work_in_progress
+Primer-compatible publications layout
+- Section 1: Research Papers  (everything NOT work_in_progress)
+- Section 2: Work in Progress Papers (status == work_in_progress)
+- Right TOC: "Research Papers" + "In preparation"
 {%- endcomment -%}
-{%- assign items = site.publications | sort: "year" | reverse -%}
-{%- assign wip = items | where_exp: "p", "p.status == 'work_in_progress'" -%}
-{%- assign main_items = items | where_exp: "p", "p.status != 'work_in_progress' or p.status == nil" -%}
 
-<div id="main" role="main" class="with-toc">
-  {% include sidebar.html %}
+{%- assign all = site.publications | sort: "year" | reverse -%}
+{%- assign wip = all | where_exp: "p", "p.status == 'work_in_progress'" -%}
+{%- assign main_items = all | where_exp: "p", "p.status != 'work_in_progress' or p.status == nil" -%}
 
+<div id="main" class="with-toc">
+  <!-- MAIN CONTENT -->
   <div class="archive">
-    {% unless page.header.overlay_color or page.header.overlay_image %}
-      <h1 class="page__title">{{ page.title }}</h1>
-    {% endunless %}
+    <h1 class="page__title">{{ page.title }}</h1>
 
     <div class="archive__content">
 
-      {%- comment -%} ===== Regular publications (non-WIP) ===== {%- endcomment -%}
       {%- if main_items and main_items.size > 0 -%}
+        <h2 class="pub__section">Research Papers</h2>
         {%- for post in main_items -%}
           {%- assign raw_status = post.status | downcase -%}
           {%- capture status_label -%}
@@ -49,7 +38,8 @@ Order all publications by year (newest first), then split into:
             {%- endcase -%}
           {%- endcapture -%}
 
-          <article id="pub-{{ post.slug | slugify }}" class="archive__item">
+          {%- assign anchor_id = post.slug | default: post.title | slugify -%}
+          <article id="pub-{{ anchor_id }}" class="archive__item">
             <h2 class="archive__item-title">{{ post.title }}</h2>
 
             {%- if post.authors -%}
@@ -84,40 +74,27 @@ Order all publications by year (newest first), then split into:
         {%- endfor -%}
       {%- endif -%}
 
-      {%- comment -%} ===== Work in Progress Papers (WIP only) ===== {%- endcomment -%}
       {%- if wip and wip.size > 0 -%}
         <h2 class="pub__section">Work in Progress Papers</h2>
-
         {%- for post in wip -%}
-          {%- assign raw_status = post.status | downcase -%}
-          {%- capture status_label -%}
-            {%- case raw_status -%}
-              {%- when "work_in_progress" -%}Work in Progress
-              {%- else -%}{{ post.status | replace: "_"," " | capitalize }}
-            {%- endcase -%}
-          {%- endcapture -%}
-
-          <article id="pub-{{ post.slug | slugify }}" class="archive__item">
+          {%- assign anchor_id = post.slug | default: post.title | slugify -%}
+          <article id="pub-{{ anchor_id }}" class="archive__item">
             <h2 class="archive__item-title">{{ post.title }}</h2>
 
             {%- if post.authors -%}
               <p class="archive__item-meta">{{ post.authors }}</p>
             {%- endif -%}
 
-            {%- if post.venue or post.year or post.status -%}
-              <p class="archive__item-meta pub__meta">
-                {%- if post.status -%}
-                  <span class="pub__status">{{ status_label | strip }}</span>
-                  <span class="pub__dash">&nbsp;—&nbsp;</span>
-                {%- endif -%}
-                {%- if post.venue -%}
-                  <span class="pub__venue"><em>{{ post.venue }}</em></span>
-                {%- endif -%}
-                {%- if post.year -%}
-                  <span class="pub__dot"> · </span><span class="pub__year">{{ post.year }}</span>
-                {%- endif -%}
-              </p>
-            {%- endif -%}
+            <p class="archive__item-meta pub__meta">
+              <span class="pub__status">Work in Progress</span>
+              {%- if post.venue -%}
+                <span class="pub__dash">&nbsp;—&nbsp;</span>
+                <span class="pub__venue"><em>{{ post.venue }}</em></span>
+              {%- endif -%}
+              {%- if post.year -%}
+                <span class="pub__dot"> · </span><span class="pub__year">{{ post.year }}</span>
+              {%- endif -%}
+            </p>
 
             {%- if post.abstract -%}
               <div class="archive__item-excerpt">{{ post.abstract }}</div>
@@ -138,8 +115,9 @@ Order all publications by year (newest first), then split into:
     </div>
   </div>
 
+  <!-- RIGHT-SIDE TOC -->
   <aside class="toc toc--right">
-    <h2 class="toc__title">Publications</h2>
+    <h2 class="toc__title">Research Papers</h2>
 
     {%- if main_items and main_items.size > 0 -%}
       <ol class="toc__list">
@@ -158,8 +136,9 @@ Order all publications by year (newest first), then split into:
               {%- else -%}{{ post.status | replace: "_"," " | capitalize }}
             {%- endcase -%}
           {%- endcapture -%}
+          {%- assign anchor_id = post.slug | default: post.title | slugify -%}
           <li>
-            <a href="#pub-{{ post.slug | slugify }}">
+            <a href="#pub-{{ anchor_id }}">
               <span class="toc__title-text">{{ post.title }}</span>
               {%- if post.status -%}
                 <span class="toc__dash"> — </span>
@@ -175,8 +154,9 @@ Order all publications by year (newest first), then split into:
       <h3 class="toc__section">In preparation</h3>
       <ol class="toc__list">
         {%- for post in wip -%}
+          {%- assign anchor_id = post.slug | default: post.title | slugify -%}
           <li>
-            <a href="#pub-{{ post.slug | slugify }}">
+            <a href="#pub-{{ anchor_id }}">
               <span class="toc__title-text">{{ post.title }}</span>
               <span class="toc__dash"> — </span>
               <span class="pub__status pub__status--mini">Work in Progress</span>
