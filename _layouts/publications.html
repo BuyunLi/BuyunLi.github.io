@@ -13,8 +13,6 @@ layout: default
 {% endif %}
 
 {%- assign items = site.publications | sort: "year" | reverse -%}
-{%- assign wip = items | where_exp: "p", "p.status and p.status == 'work_in_progress'" -%}
-{%- assign main_items = items | where_exp: "p", "(p.status and p.status != 'work_in_progress') or p.status == nil" -%}
 
 <div id="main" role="main" class="with-toc">
   {% include sidebar.html %}
@@ -25,11 +23,8 @@ layout: default
     {% endunless %}
 
     <div class="archive__content">
-
-      {%- comment -%} ===== Research Papers (everything except work_in_progress) ===== {%- endcomment -%}
-      {%- if main_items and main_items.size > 0 -%}
-        <h2 class="pub__section">Research Papers</h2>
-        {%- for post in main_items -%}
+      {%- if items and items.size > 0 -%}
+        {%- for post in items -%}
           {%- assign raw_status = post.status | downcase -%}
           {%- capture status_label -%}
             {%- case raw_status -%}
@@ -41,6 +36,11 @@ layout: default
               {%- when "published" -%}Published
               {%- when "draft" -%}Draft
               {%- when "work_in_progress" -%}Work in Progress
+              {%- when "wip" -%}Work in Progress
+              {%- when "working_paper" -%}Work in Progress
+              {%- when "in_preparation" -%}Work in Progress
+              {%- when "work-in-progress" -%}Work in Progress
+              {%- when "work in progress" -%}Work in Progress
               {%- else -%}{{ post.status | replace: "_"," " | capitalize }}
             {%- endcase -%}
           {%- endcapture -%}
@@ -78,66 +78,17 @@ layout: default
             </div>
           </article>
         {%- endfor -%}
-      {%- endif -%}
-
-      {%- comment -%} ===== Work in Progress Papers (status: work_in_progress) ===== {%- endcomment -%}
-      {%- if wip and wip.size > 0 -%}
-        <h2 class="pub__section">Work in Progress Papers</h2>
-        {%- for post in wip -%}
-          {%- assign raw_status = post.status | downcase -%}
-          {%- capture status_label -%}
-            {%- case raw_status -%}
-              {%- when "work_in_progress" -%}Work in Progress
-              {%- else -%}{{ post.status | replace: "_"," " | capitalize }}
-            {%- endcase -%}
-          {%- endcapture -%}
-
-          <article id="pub-{{ post.slug | slugify }}" class="archive__item">
-            <h2 class="archive__item-title">{{ post.title }}</h2>
-
-            {%- if post.authors -%}
-              <p class="archive__item-meta">{{ post.authors }}</p>
-            {%- endif -%}
-
-            {%- if post.venue or post.year or post.status -%}
-              <p class="archive__item-meta pub__meta">
-                {%- if post.status -%}
-                  <span class="pub__status">{{ status_label | strip }}</span>
-                  <span class="pub__dash">&nbsp;—&nbsp;</span>
-                {%- endif -%}
-                {%- if post.venue -%}
-                  <span class="pub__venue"><em>{{ post.venue }}</em></span>
-                {%- endif -%}
-                {%- if post.year -%}
-                  <span class="pub__dot"> · </span><span class="pub__year">{{ post.year }}</span>
-                {%- endif -%}
-              </p>
-            {%- endif -%}
-
-            {%- if post.abstract -%}
-              <div class="archive__item-excerpt">{{ post.abstract }}</div>
-            {%- endif -%}
-
-            <div class="pub__footer">
-              {%- if post.pdf_link -%}
-                <a class="pub__link" href="{{ post.pdf_link }}" target="_blank" rel="noopener">📄 Preprint</a>
-              {%- endif -%}
-            </div>
-          </article>
-        {%- endfor -%}
-      {%- endif -%}
-
-      {%- if main_items.size == 0 and wip.size == 0 -%}
+      {%- else -%}
         {{ content }}
       {%- endif -%}
     </div>
   </div>
 
   <aside class="toc toc--right">
-    <h2 class="toc__title">Research Papers</h2>
-    {%- if main_items and main_items.size > 0 -%}
-      <ol class="toc__list">
-        {%- for post in main_items -%}
+    <h2 class="toc__title">Publications</h2>
+    <ol class="toc__list">
+      {%- if items and items.size > 0 -%}
+        {%- for post in items -%}
           {%- assign raw_status = post.status | downcase -%}
           {%- capture status_label -%}
             {%- case raw_status -%}
@@ -148,6 +99,12 @@ layout: default
               {%- when "in_press" -%}In Press
               {%- when "published" -%}Published
               {%- when "draft" -%}Draft
+              {%- when "work_in_progress" -%}Work in Progress
+              {%- when "wip" -%}Work in Progress
+              {%- when "working_paper" -%}Work in Progress
+              {%- when "in_preparation" -%}Work in Progress
+              {%- when "work-in-progress" -%}Work in Progress
+              {%- when "work in progress" -%}Work in Progress
               {%- else -%}{{ post.status | replace: "_"," " | capitalize }}
             {%- endcase -%}
           {%- endcapture -%}
@@ -161,22 +118,7 @@ layout: default
             </a>
           </li>
         {%- endfor -%}
-      </ol>
-    {%- endif -%}
-
-    {%- if wip and wip.size > 0 -%}
-      <h3 class="toc__section">In preparation</h3>
-      <ol class="toc__list">
-        {%- for post in wip -%}
-          <li>
-            <a href="#pub-{{ post.slug | slugify }}">
-              <span class="toc__title-text">{{ post.title }}</span>
-              <span class="toc__dash"> — </span>
-              <span class="pub__status pub__status--mini">Work in Progress</span>
-            </a>
-          </li>
-        {%- endfor -%}
-      </ol>
-    {%- endif -%}
+      {%- endif -%}
+    </ol>
   </aside>
 </div>
