@@ -263,7 +263,7 @@
   margin-right: auto;
 
   /* Keep your 2-column grid but give the TOC a slightly smaller share */
-  grid-template-columns: minmax(0, 7fr) minmax(240px, 2.3fr);  /* ~70% / ~23–25% */
+  grid-template-columns: minmax(0, 6fr) minmax(240px, 2.3fr);  /* ~70% / ~23–25% */
   gap: 1rem;                         /* a bit tighter gap so layout feels cleaner */
 }
 
