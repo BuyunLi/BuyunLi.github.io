@@ -1,125 +1,113 @@
-/* =========================================================
-   FIX THEME FLOATS when using our grid layout
-   ========================================================= */
-#main.with-toc > .sidebar,
-#main.with-toc > .archive {
-  float: none !important;
-  width: auto !important;
-  margin: 0 !important;
-  max-width: none !important;
-}
-
-/* Some themes add extra max-widths inside content; neutralize them */
-#main.with-toc .page__content,
-#main.with-toc .archive__item,
-#main.with-toc .archive__content {
-  max-width: none !important;
-}
-
-/* =========================================================
-   GRID: sidebar | MAIN (~70–75%) | TOC (slim)
-   ========================================================= */
+/* ============================
+   FORCE a clean 3-column layout
+   ============================ */
 #main.with-toc {
-  display: grid;
+  /* win over any theme flex/floats */
+  display: grid !important;
+  grid-template-areas: "sidebar content toc";
+  /* ~15% | 70% | ~15% with sane min/max */
   grid-template-columns:
-    clamp(160px, 16vw, 210px)   /* LEFT sidebar (slimmer) */
-    minmax(0, 1fr)              /* MAIN content (flexes; takes the rest) */
-    clamp(130px, 13vw, 180px);  /* RIGHT TOC (slimmer) */
+    clamp(140px, 15%, 200px)   /* sidebar */
+    minmax(0, 70%)             /* main content */
+    clamp(120px, 15%, 180px);  /* right TOC */
   gap: 1.25rem;
   align-items: start;
+  box-sizing: border-box;
 }
 
-/* Allow columns to shrink properly */
+/* Neutralize theme floats/widths INSIDE this page only */
 #main.with-toc > .sidebar,
 #main.with-toc > .archive,
-#main.with-toc > .toc--right { min-width: 0; }
-
-/* Left sidebar + right TOC behavior */
-#main.with-toc > .sidebar { grid-column: 1; }
-#main.with-toc > .archive { grid-column: 2; }
 #main.with-toc > .toc--right {
-  grid-column: 3;
+  float: none !important;
+  width: auto !important;
+  max-width: none !important;
+  margin: 0 !important;
+  min-width: 0;                /* allow shrinking in grid */
+}
+
+/* Map children to grid areas explicitly */
+#main.with-toc > .sidebar,
+#main.with-toc > .sidebar.sticky { grid-area: sidebar; }
+
+#main.with-toc > .archive { grid-area: content; }
+
+#main.with-toc > .toc--right {
+  grid-area: toc;
   position: sticky;
   top: 6rem;
   max-height: calc(100vh - 6rem);
   overflow: auto;
-  padding-left: 0.5rem;            /* slimmer */
+  padding-left: 0.5rem;
   border-left: 1px solid #e0e0e0;
-  justify-self: end;               /* hug right edge */
+  justify-self: end;           /* hug right edge */
+  /* hard cap so TOC can’t push center narrower */
+  max-width: 180px;
 }
 
-/* Mobile: stack */
+/* ==============  Mobile: stack  ============== */
 @media (max-width: 980px) {
   #main.with-toc {
+    grid-template-areas: "content" "sidebar" "toc";
     grid-template-columns: 1fr;
     gap: 1rem;
-  }
-  #main.with-toc > .sidebar,
-  #main.with-toc > .archive,
-  #main.with-toc > .toc--right {
-    grid-column: 1;
-    max-width: none;
-    justify-self: stretch;
   }
   #main.with-toc > .toc--right {
     border-left: 0;
     border-top: 1px solid #e0e0e0;
     padding-top: 1rem;
     max-height: none;
+    justify-self: stretch;
   }
 }
 
-/* Smooth anchor scrolling */
-html { scroll-behavior: smooth; }
-
-/* =========================================================
-   TOC: smaller, normal case, numbers align with TITLE (not pill)
-   ========================================================= */
+/* ============================
+   TOC: number aligns with title
+   ============================ */
 .toc--right, .toc__title, .toc__list, .toc__list a,
-.toc__title-text, .toc__status, .toc__dash {
-  text-transform: none !important;   /* kill all-caps from theme */
-}
+.toc__title-text, .toc__status, .toc__dash { text-transform: none !important; }
 
 .toc__title { font-size: 0.95rem; margin: 0.25rem 0 0.5rem; }
 
-/* Keep numeric marker outside and aligned to first line (title) */
+/* keep list marker outside, aligned with first line (title) */
 .toc__list {
   margin: 0;
-  padding-left: 1.1rem;               /* space for 1., 2., … */
+  padding-left: 1.1rem;
   list-style: decimal outside;
 }
 
+/* make the link inline-flex and baseline-aligned so the number aligns to the TITLE */
 .toc__list a {
-  display: inline-flex;               /* align title + pill on one baseline */
+  display: inline-flex;
   align-items: baseline;
   gap: 0.35rem;
   font-size: 0.85rem;
   line-height: 1.3;
   text-decoration: none;
-  overflow-wrap: anywhere;            /* wrap long titles gracefully */
+  overflow-wrap: anywhere;   /* wrap long titles nicely */
 }
 .toc__list a:hover { text-decoration: underline; }
 
 .toc__title-text { font-weight: 600; }
 .toc__dash       { opacity: 0.8; }
 
-/* Status in TOC as a mini pill (same style language as main) */
+/* mini status pill in TOC (matches main pill style) */
 .pub__status--mini {
   display: inline-block;
   font-size: 0.72rem;
   font-weight: 700;
   padding: 0.12em 0.5em;
   border-radius: 999px;
-  line-height: 1;                     /* don't pull the baseline */
+  line-height: 1;
   background: #f1f3f5;
   color: #333;
   border: 1px solid #d0d5da;
   vertical-align: baseline;
 }
 
-/* =========================================================
-   Main publication list (your existing styles)
-   ========================================================= */
+/* ============================
+   Main publication list (as before)
+   ============================ */
 .archive .archive__item {
   border-bottom: 2px solid #cfd8dc;
   padding-bottom: 1rem;
@@ -152,9 +140,5 @@ html { scroll-behavior: smooth; }
   align-items: center;
   flex-wrap: wrap;
 }
-.pub__link {
-  font-weight: 600;
-  text-decoration: none;
-  border-bottom: 1px solid transparent;
-}
+.pub__link { font-weight: 600; text-decoration: none; border-bottom: 1px solid transparent; }
 .pub__link:hover { text-decoration: underline; }
