@@ -143,13 +143,13 @@
 .pub__link:hover { text-decoration: underline; }
 
 .toc--right {
-  font-size: 0.82rem;   /* ← tweak this: try 0.80rem or 0.75rem if you want smaller */
+  font-size: 0.72rem;   /* ← tweak this: try 0.80rem or 0.75rem if you want smaller */
   line-height: 1.3;
 }
 
 /* Keep headings a touch larger than the base, but still small */
-.toc--right .toc__title   { font-size: 1.0em; }  /* = 0.82rem */
-.toc--right .toc__section { font-size: 0.95em; } /* ~0.78rem */
+.toc--right .toc__title   { font-size: 0.7em; }  /* = 0.82rem */
+.toc--right .toc__section { font-size: 0.65em; } /* ~0.78rem */
 
 /* Ensure list markers (1., 2., …) and links use the base */
 .toc--right .toc__list,
