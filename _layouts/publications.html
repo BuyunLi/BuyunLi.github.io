@@ -3,6 +3,12 @@ layout: default
 ---
 
 {%- assign items = site.publications | sort: "year" | reverse -%}
+
+{%- comment -%}
+  Partition items into two sections:
+  1) Under review / revision: under_review, major_revision, minor_revision
+  2) Work in progress: draft, working_paper, in_preparation, wip
+{%- endcomment -%}
 {%- assign reviewed = items | where_exp: "p",
   "p.status and (p.status == 'under_review' or p.status == 'major_revision' or p.status == 'minor_revision')" -%}
 {%- assign wip = items | where_exp: "p",
@@ -13,8 +19,10 @@ layout: default
     <h1 class="page__title">{{ page.title }}</h1>
 
     <div class="archive__content">
+
       {%- if reviewed and reviewed.size > 0 -%}
         <h2 class="pub__section">Under review / revision</h2>
+
         {%- for post in reviewed -%}
           {%- assign raw_status = post.status | downcase -%}
           {%- capture status_label -%}
@@ -28,19 +36,34 @@ layout: default
 
           <article id="pub-{{ post.slug | slugify }}" class="archive__item">
             <h2 class="archive__item-title">{{ post.title }}</h2>
-            {%- if post.authors -%}<p class="archive__item-meta">{{ post.authors }}</p>{%- endif -%}
+
+            {%- if post.authors -%}
+              <p class="archive__item-meta">{{ post.authors }}</p>
+            {%- endif -%}
+
             {%- if post.venue or post.year or post.status -%}
               <p class="archive__item-meta pub__meta">
                 {%- if post.status -%}
-                  <span class="pub__status">{{ status_label | strip }}</span><span class="pub__dash">&nbsp;—&nbsp;</span>
+                  <span class="pub__status">{{ status_label | strip }}</span>
+                  <span class="pub__dash">&nbsp;—&nbsp;</span>
                 {%- endif -%}
-                {%- if post.venue -%}<span class="pub__venue"><em>{{ post.venue }}</em></span>{%- endif -%}
-                {%- if post.year -%}<span class="pub__dot"> · </span><span class="pub__year">{{ post.year }}</span>{%- endif -%}
+                {%- if post.venue -%}
+                  <span class="pub__venue"><em>{{ post.venue }}</em></span>
+                {%- endif -%}
+                {%- if post.year -%}
+                  <span class="pub__dot"> · </span><span class="pub__year">{{ post.year }}</span>
+                {%- endif -%}
               </p>
             {%- endif -%}
-            {%- if post.abstract -%}<div class="archive__item-excerpt">{{ post.abstract }}</div>{%- endif -%}
+
+            {%- if post.abstract -%}
+              <div class="archive__item-excerpt">{{ post.abstract }}</div>
+            {%- endif -%}
+
             <div class="pub__footer">
-              {%- if post.pdf_link -%}<a class="pub__link" href="{{ post.pdf_link }}" target="_blank" rel="noopener">📄 Preprint</a>{%- endif -%}
+              {%- if post.pdf_link -%}
+                <a class="pub__link" href="{{ post.pdf_link }}" target="_blank" rel="noopener">📄 Preprint</a>
+              {%- endif -%}
             </div>
           </article>
         {%- endfor -%}
@@ -48,6 +71,7 @@ layout: default
 
       {%- if wip and wip.size > 0 -%}
         <h2 class="pub__section">Work in progress</h2>
+
         {%- for post in wip -%}
           {%- assign raw_status = post.status | downcase -%}
           {%- capture status_label -%}
@@ -62,19 +86,34 @@ layout: default
 
           <article id="pub-{{ post.slug | slugify }}" class="archive__item">
             <h2 class="archive__item-title">{{ post.title }}</h2>
-            {%- if post.authors -%}<p class="archive__item-meta">{{ post.authors }}</p>{%- endif -%}
+
+            {%- if post.authors -%}
+              <p class="archive__item-meta">{{ post.authors }}</p>
+            {%- endif -%}
+
             {%- if post.venue or post.year or post.status -%}
               <p class="archive__item-meta pub__meta">
                 {%- if post.status -%}
-                  <span class="pub__status">{{ status_label | strip }}</span><span class="pub__dash">&nbsp;—&nbsp;</span>
+                  <span class="pub__status">{{ status_label | strip }}</span>
+                  <span class="pub__dash">&nbsp;—&nbsp;</span>
                 {%- endif -%}
-                {%- if post.venue -%}<span class="pub__venue"><em>{{ post.venue }}</em></span>{%- endif -%}
-                {%- if post.year -%}<span class="pub__dot"> · </span><span class="pub__year">{{ post.year }}</span>{%- endif -%}
+                {%- if post.venue -%}
+                  <span class="pub__venue"><em>{{ post.venue }}</em></span>
+                {%- endif -%}
+                {%- if post.year -%}
+                  <span class="pub__dot"> · </span><span class="pub__year">{{ post.year }}</span>
+                {%- endif -%}
               </p>
             {%- endif -%}
-            {%- if post.abstract -%}<div class="archive__item-excerpt">{{ post.abstract }}</div>{%- endif -%}
+
+            {%- if post.abstract -%}
+              <div class="archive__item-excerpt">{{ post.abstract }}</div>
+            {%- endif -%}
+
             <div class="pub__footer">
-              {%- if post.pdf_link -%}<a class="pub__link" href="{{ post.pdf_link }}" target="_blank" rel="noopener">📄 Preprint</a>{%- endif -%}
+              {%- if post.pdf_link -%}
+                <a class="pub__link" href="{{ post.pdf_link }}" target="_blank" rel="noopener">📄 Preprint</a>
+              {%- endif -%}
             </div>
           </article>
         {%- endfor -%}
@@ -86,7 +125,6 @@ layout: default
     </div>
   </div>
 
-  <!-- Simple TOC without theme includes -->
   <aside class="toc toc--right">
     <h2 class="toc__title">Publications</h2>
 
