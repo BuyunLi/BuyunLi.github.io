@@ -10,7 +10,7 @@ location: "Bloomington, USA"
 eval_overall: "6.9/7"
 eval_support: "6.8/7"
 eval_materials: "6.9/7"
-# eval_enrollment: 120
+eval_enrollment: 49/87
 
 # Optional quick links
 # syllabus_url: /files/K303_Syllabus.pdf
