@@ -1,28 +1,33 @@
 /* ===============================
-   GRID: sidebar | MAIN(70%) | TOC
+   GRID: sidebar | MAIN (~70–75%) | TOC
    =============================== */
 #main.with-toc {
   display: grid;
-  /* Side columns slim; middle takes ~70% */
+  /* Slim fixed-ish sides, flexible center */
   grid-template-columns:
-    minmax(160px, 15%)     /* left sidebar */
-    minmax(0, 70%)         /* MAIN content */
-    minmax(140px, 15%);    /* right TOC */
+    clamp(140px, 16vw, 200px)   /* LEFT sidebar (narrower) */
+    minmax(0, 1fr)              /* MAIN content (takes the rest) */
+    clamp(120px, 12vw, 160px);  /* RIGHT TOC (narrower) */
   gap: 1.25rem;
   align-items: start;
 }
 
-#main.with-toc > .sidebar { grid-column: 1; }
-#main.with-toc > .archive { grid-column: 2; min-width: 0; }
+/* Let columns shrink properly inside the grid */
+#main.with-toc > .sidebar,
+#main.with-toc > .archive,
+#main.with-toc > .toc--right { min-width: 0; }
+
+/* Optional caps on side widths to prevent “pushing” the center */
+#main.with-toc > .sidebar  { max-width: 200px; }
 #main.with-toc > .toc--right {
-  grid-column: 3;
+  max-width: 160px;
+  justify-self: end;            /* hug right edge */
   position: sticky;
   top: 6rem;
   max-height: calc(100vh - 6rem);
   overflow: auto;
-  padding-left: 0.75rem;      /* slimmer feel */
+  padding-left: 0.5rem;
   border-left: 1px solid #e0e0e0;
-  justify-self: end;          /* hug right edge */
 }
 
 /* Mobile: stack */
@@ -33,11 +38,14 @@
   }
   #main.with-toc > .sidebar,
   #main.with-toc > .archive,
-  #main.with-toc > .toc--right { grid-column: 1; }
+  #main.with-toc > .toc--right {
+    grid-column: 1;
+    max-width: none;
+    justify-self: stretch;
+  }
   #main.with-toc > .toc--right {
     border-left: 0;
     border-top: 1px solid #e0e0e0;
-    margin-top: 1rem;
     padding-top: 1rem;
     max-height: none;
   }
@@ -46,70 +54,67 @@
 /* Smooth scrolling */
 html { scroll-behavior: smooth; }
 
-/* =========================================
-   TOC: titles smaller, no ALL CAPS, and
-   number aligns with the TITLE (not status)
-   ========================================= */
+/* ===============================
+   TOC: smaller text, no ALL CAPS,
+   marker aligns with the TITLE
+   =============================== */
 .toc--right, .toc__title, .toc__list, .toc__list a,
 .toc__title-text, .toc__status, .toc__dash {
-  text-transform: none !important;  /* kill uppercase from theme */
+  text-transform: none !important;
 }
 
-/* Keep list marker outside and aligned with first line */
+.toc__title { font-size: 0.95rem; margin: 0.25rem 0 0.5rem; }
+
+/* Keep list marker (1., 2., …) aligned with the first line (title) */
 .toc__list {
   margin: 0;
-  padding-left: 1.1rem;             /* room for numbers */
+  padding-left: 1.1rem;          /* space for numbers */
   list-style: decimal outside;
 }
 
-/* Make the link behave like one line for baseline alignment,
-   and align children to the text baseline */
 .toc__list a {
-  display: inline-flex;
-  align-items: baseline;            /* baseline alignment = use title’s baseline */
+  display: inline-flex;          /* align title + pill on one baseline */
+  align-items: baseline;
   gap: 0.35rem;
-  font-size: 0.85rem;               /* smaller TOC text */
-  line-height: 1.3;                 /* stable baseline height */
+  font-size: 0.85rem;
+  line-height: 1.3;
   text-decoration: none;
 }
 .toc__list a:hover { text-decoration: underline; }
 
-.toc__title { font-size: 0.95rem; margin: 0.25rem 0 0.5rem; }
 .toc__title-text { font-weight: 600; }
-
-/* Status in TOC as mini pill (same style language as main) */
 .toc__dash { opacity: 0.8; }
+
+/* Status in TOC as a mini pill (matches main pill style) */
 .pub__status--mini {
   display: inline-block;
   font-size: 0.72rem;
   font-weight: 700;
   padding: 0.12em 0.5em;
   border-radius: 999px;
-  line-height: 1;                   /* don’t stretch the baseline */
+  line-height: 1;
   background: #f1f3f5;
   color: #333;
   border: 1px solid #d0d5da;
-  vertical-align: baseline;         /* align with title baseline */
+  vertical-align: baseline;      /* don’t pull the marker down */
 }
 
-/* =========================================
-   Publication item styling (main list)
-   ========================================= */
+/* ===============================
+   Main publication list (unchanged)
+   =============================== */
 .archive .archive__item {
-  border-bottom: 2px solid #cfd8dc; /* clearer separator */
+  border-bottom: 2px solid #cfd8dc;
   padding-bottom: 1rem;
   margin-bottom: 1.25rem;
 }
 .archive .archive__item:last-child { border-bottom: 0; }
 
-/* Meta row: [status pill] — [venue small] · [year] */
 .pub__meta { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0.35rem; }
 .pub__dash { opacity: 0.7; }
 .pub__venue { font-size: 0.95rem; color: #555; }
 .pub__year  { font-size: 0.95rem; color: #666; }
 .pub__dot   { color: #aaa; }
 
-/* Status pill (main list) */
 .pub__status {
   display: inline-block;
   font-size: 0.78rem;
@@ -122,7 +127,6 @@ html { scroll-behavior: smooth; }
   border: 1px solid #d0d5da;
 }
 
-/* Footer (for Preprint link) */
 .pub__footer {
   margin-top: 0.5rem;
   display: flex;
