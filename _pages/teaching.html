@@ -7,79 +7,84 @@ author_profile: true
 
 {% include base_path %}
 
-<h2>Teaching</h2>
-
-<table>
-  <thead>
-    <tr>
-      <th>Semester</th>
-      <th>Course</th>
-      <th>Role</th>
-      <th>Evaluation</th>
-      <th>Location</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% assign posts = site.teaching | sort: "date" | reverse %}
-    {% for post in posts %}
-      {% if post.semesters %}
-        {%- comment -%}
-          Multi-semester entries: iterate each term.
-          Expected front matter:
-          semesters:
-            - semester: "Fall 2023"
-              role: "Instructor"
-              evaluation: "6.9/7 overall..."
-              location: "Bloomington, Indiana"
-        {%- endcomment -%}
-        {% for term in post.semesters %}
-        <tr>
-          <td>{{ term.semester | default: post.location | default: post.date | date: "%B %Y" }}</td>
-          <td>
-            <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
-            {% if post.venue %}<br><small>{{ post.venue }}</small>{% endif %}
-          </td>
-          <td>{{ term.role | default: post.role | default: "—" }}</td>
-          <td>{{ term.evaluation | default: post.evaluation | default: "—" }}</td>
-          <td>{{ term.location | default: post.location | default: "—" }}</td>
-        </tr>
-        {% endfor %}
-      {% else %}
-        {%- comment -%}
-          Single-semester (legacy) entries: use top-level fields.
-          You can still add `role:` and `evaluation:` at the top level if desired.
-        {%- endcomment -%}
-        <tr>
-          <td>
-            {%- if post.semester -%}
-              {{ post.semester }}
-            {%- elsif post.location -%}
-              {{ post.location }}
-            {%- elsif post.date -%}
-              {{ post.date | date: "%B %Y" }}
-            {%- else -%}
-              —
-            {%- endif -%}
-          </td>
-          <td>
-            <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
-            {% if post.venue %}<br><small>{{ post.venue }}</small>{% endif %}
-          </td>
-          <td>{{ post.role | default: "—" }}</td>
-          <td>{{ post.evaluation | default: "—" }}</td>
-          <td>{{ post.location | default: "—" }}</td>
-        </tr>
-      {% endif %}
-    {% endfor %}
-  </tbody>
-</table>
-
 {%- comment -%}
-  Optional: keep the original archive list below the table.
-  Remove this block if you only want the table.
+  This page groups teaching posts by course.
+  Prefer adding `course_key:` in each teaching file (e.g., "BUS-K303") so
+  cross-semester entries lump together. If `course_key` is absent, we fall back to `title`.
+
+  Supported front matter patterns:
+  1) One file with:
+     semesters:
+       - semester: "Fall 2023"
+         role: "Instructor"
+         evaluation: "6.9/7 overall..."
+         location: "Bloomington, IN"
+       - ...
+  2) Multiple files (one per semester) with optional:
+     semester: "Fall 2023"
+     role: "Instructor"
+     evaluation: "..."
+     location: "Bloomington, IN"
 {%- endcomment -%}
-<hr>
-{% for post in posts %}
-  {% include archive-single.html %}
-{% endfor %}
+
+{%- assign posts = site.teaching -%}
+{%- assign grouped = posts | group_by_exp: "p", "p.course_key | default: p.title" -%}
+
+<section class="teaching-list">
+  {%- for g in grouped -%}
+    {%- assign items_sorted = g.items | sort: "date" -%}
+    {%- assign latest = items_sorted | last -%}
+
+    <article class="teaching-entry" style="margin-bottom:2rem;">
+      <h2 class="archive__item-title">
+        <a href="{{ latest.url | relative_url }}">{{ g.name }}</a>
+      </h2>
+
+      {%- if latest.venue -%}
+        <p class="archive__item-excerpt"><em>{{ latest.venue }}</em></p>
+      {%- endif -%}
+
+      {%- comment -%}
+        Build a flat list of terms across all items in the group.
+      {%- endcomment -%}
+      <ul class="teaching-terms" style="list-style: none; padding-left: 0;">
+        {%- for p in items_sorted reversed -%}
+          {%- if p.semesters -%}
+            {%- for term in p.semesters -%}
+              <li style="margin: .25rem 0;">
+                <strong>{{ term.semester }}</strong>
+                {%- if term.role or p.role -%} — Role: {{ term.role | default: p.role }}{%- endif -%}
+                {%- if term.evaluation or p.evaluation -%} · Evaluation: {{ term.evaluation | default: p.evaluation }}{%- endif -%}
+                {%- if term.location or p.location -%} · {{ term.location | default: p.location }}{%- endif -%}
+              </li>
+            {%- endfor -%}
+          {%- else -%}
+            <li style="margin: .25rem 0;">
+              {%- if p.semester -%}
+                <strong>{{ p.semester }}</strong>
+              {%- elsif p.location -%}
+                <strong>{{ p.location }}</strong>
+              {%- elsif p.date -%}
+                <strong>{{ p.date | date: "%B %Y" }}</strong>
+              {%- else -%}
+                <strong>—</strong>
+              {%- endif -%}
+              {%- if p.role -%} — Role: {{ p.role }}{%- endif -%}
+              {%- if p.evaluation -%} · Evaluation: {{ p.evaluation }}{%- endif -%}
+              {%- if p.location -%} · {{ p.location }}{%- endif -%}
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+
+      {%- if latest.excerpt -%}
+        <div class="archive__item-excerpt">
+          {{ latest.excerpt | markdownify }}
+        </div>
+      {%- endif -%}
+    </article>
+    <hr/>
+  {%- endfor -%}
+</section>
+
 
