@@ -11,7 +11,7 @@ semesters:
     evaluation_pdf: /assets/class eval 2023 sp.pdf
   - semester: "SP 2023"
     role: "Instructor"
-    evaluation: "6.9/7 overall, 6.7/7 support, 6.9/7 preparation (15/35 Responded)"
+    evaluation: "7/7 overall, 6.7/7 support, 6.6/7 preparation (15/35 Responded)"
     location: "Bloomington, IN"
     evaluation_pdf: /assets/class eval 2023 fall.pdf
   - semester: "FA 2025 (Two sections)"
