@@ -7,17 +7,17 @@ semesters:
   - semester: "Fall 2023"
     role: "Instructor"
     evaluation: "7/7 overall, 6.8/7 support, 6.9/7 preparation (18/36 Responded)"
-    location: "Bloomington, Indiana"
+    location: "Bloomington, IN"
     evaluation_pdf: /assets/class eval 2023 fall.pdf
   - semester: "Spring 2023"
     role: "Instructor"
     evaluation: "6.9/7 overall, 6.7/7 support, 6.9/7 preparation (15/35 Responded)"
-    location: "Bloomington, Indiana"
+    location: "Bloomington, IN"
     evaluation_pdf: /assets/class eval 2023 sp.pdf
   - semester: "Fall 2025 (Two sections)"
     role: "Instructor"
     evaluation: "Forth coming"
-    location: "Bloomington, Indiana"
+    location: "Bloomington, IN"
 ---
 
 Designed the course material, assignments, exams, and reading list along with the Canvas interface.  
