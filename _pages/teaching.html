@@ -7,24 +7,41 @@ author_profile: true
 
 {% include base_path %}
 
-{%- comment -%}
-  This page groups teaching posts by course.
-  Prefer adding `course_key:` in each teaching file (e.g., "BUS-K303") so
-  cross-semester entries lump together. If `course_key` is absent, we fall back to `title`.
+<style>
+  .teaching-entry { margin-bottom: 2rem; }
+  .teaching-entry h2 { margin-bottom: .25rem; }
+  .teaching-venue { margin: 0; color: #555; font-size: 0.95rem; }
+  .role-line { margin: .25rem 0 .25rem; color: #555; font-size: 0.9rem; }
+  .teaching-terms { list-style: none; padding-left: 0; margin: .25rem 0 0; }
+  .teaching-terms li { margin: .2rem 0; }
+  .term-meta { font-size: 0.9rem; color: #555; }
+  .term-meta a { text-decoration: none; }
+  .term-meta a:hover { text-decoration: underline; }
+  .divider { border: 0; border-top: 1px solid #eee; margin: 1.25rem 0; }
+</style>
 
-  Supported front matter patterns:
-  1) One file with:
-     semesters:
-       - semester: "Fall 2023"
-         role: "Instructor"
-         evaluation: "6.9/7 overall..."
-         location: "Bloomington, IN"
-       - ...
-  2) Multiple files (one per semester) with optional:
-     semester: "Fall 2023"
-     role: "Instructor"
-     evaluation: "..."
-     location: "Bloomington, IN"
+{%- comment -%}
+  Group by stable course identifier if available.
+  Recommended front matter on each teaching file:
+    course_key: BUS-K303
+    course_role: Instructor                # optional, shown once per course
+    evaluation_pdf: /assets/evals/K303.pdf # optional, course-level PDF
+
+  Option A (single file, many terms):
+    semesters:
+      - semester: "Fall 2023"
+        role: "Instructor"                 # optional; ignored for role line
+        evaluation: "6.9/7 overall…"
+        evaluation_pdf: /assets/evals/K303_F23.pdf  # optional, per-term PDF
+        location: "Bloomington, IN"
+      - ...
+
+  Option B (one file per term):
+    semester: "Fall 2023"
+    role: "Instructor"                     # optional; auto-detected if no course_role
+    evaluation: "6.9/7 overall…"
+    evaluation_pdf: /assets/evals/K303_F23.pdf      # optional
+    location: "Bloomington, IN"
 {%- endcomment -%}
 
 {%- assign posts = site.teaching -%}
@@ -35,43 +52,102 @@ author_profile: true
     {%- assign items_sorted = g.items | sort: "date" -%}
     {%- assign latest = items_sorted | last -%}
 
-    <article class="teaching-entry" style="margin-bottom:2rem;">
+    {%- comment -%}
+      Determine a single role to display once for the course.
+      Priority: course_role (explicit) -> first non-empty role found across terms/files.
+    {%- endcomment -%}
+    {%- assign course_role = latest.course_role -%}
+    {%- if course_role == nil or course_role == "" -%}
+      {%- for p in items_sorted -%}
+        {%- if p.semesters -%}
+          {%- for t in p.semesters -%}
+            {%- if t.role and t.role != "" -%}{%- assign course_role = t.role -%}{%- break -%}{%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+        {%- if course_role == nil or course_role == "" -%}
+          {%- if p.role and p.role != "" -%}{%- assign course_role = p.role -%}{%- endif -%}
+        {%- endif -%}
+        {%- if course_role and course_role != "" -%}{%- break -%}{%- endif -%}
+      {%- endfor -%}
+    {%- endif -%}
+
+    {%- comment -%}
+      Course-level evaluation PDF (optional).
+      Priority: latest.evaluation_pdf -> first found across group.
+    {%- endcomment -%}
+    {%- assign course_eval_pdf = latest.evaluation_pdf -%}
+    {%- if course_eval_pdf == nil or course_eval_pdf == "" -%}
+      {%- for p in items_sorted -%}
+        {%- if p.evaluation_pdf and p.evaluation_pdf != "" -%}
+          {%- assign course_eval_pdf = p.evaluation_pdf -%}
+          {%- break -%}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endif -%}
+
+    <article class="teaching-entry">
       <h2 class="archive__item-title">
         <a href="{{ latest.url | relative_url }}">{{ g.name }}</a>
       </h2>
 
       {%- if latest.venue -%}
-        <p class="archive__item-excerpt"><em>{{ latest.venue }}</em></p>
+        <p class="teaching-venue"><em>{{ latest.venue }}</em></p>
       {%- endif -%}
 
-      {%- comment -%}
-        Build a flat list of terms across all items in the group.
-      {%- endcomment -%}
-      <ul class="teaching-terms" style="list-style: none; padding-left: 0;">
+      {%- if course_role or course_eval_pdf -%}
+        <div class="role-line">
+          {%- if course_role -%}
+            <strong>Role:</strong> {{ course_role }}
+          {%- endif -%}
+          {%- if course_eval_pdf -%}
+            {%- if course_role -%} &nbsp;·&nbsp; {%- endif -%}
+            <a href="{{ course_eval_pdf | relative_url }}" target="_blank" rel="noopener">Course evaluation (PDF)</a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      <ul class="teaching-terms">
+        {%- comment -%}
+          Render all terms (newest first). Per-term evaluation PDF (optional) appears inline.
+        {%- endcomment -%}
         {%- for p in items_sorted reversed -%}
           {%- if p.semesters -%}
             {%- for term in p.semesters -%}
-              <li style="margin: .25rem 0;">
-                <strong>{{ term.semester }}</strong>
-                {%- if term.role or p.role -%} — Role: {{ term.role | default: p.role }}{%- endif -%}
-                {%- if term.evaluation or p.evaluation -%} · Evaluation: {{ term.evaluation | default: p.evaluation }}{%- endif -%}
-                {%- if term.location or p.location -%} · {{ term.location | default: p.location }}{%- endif -%}
+              <li class="term-meta">
+                <strong>{{ term.semester | default: p.semester | default: p.location | default: p.date | date: "%B %Y" }}</strong>
+                {%- if term.evaluation or p.evaluation -%}
+                  &nbsp;·&nbsp; Evaluation: {{ term.evaluation | default: p.evaluation }}
+                {%- endif -%}
+                {%- if term.location or p.location -%}
+                  &nbsp;·&nbsp; {{ term.location | default: p.location }}
+                {%- endif -%}
+                {%- if term.evaluation_pdf -%}
+                  &nbsp;·&nbsp; <a href="{{ term.evaluation_pdf | relative_url }}" target="_blank" rel="noopener">PDF</a>
+                {%- endif -%}
               </li>
             {%- endfor -%}
           {%- else -%}
-            <li style="margin: .25rem 0;">
-              {%- if p.semester -%}
-                <strong>{{ p.semester }}</strong>
-              {%- elsif p.location -%}
-                <strong>{{ p.location }}</strong>
-              {%- elsif p.date -%}
-                <strong>{{ p.date | date: "%B %Y" }}</strong>
-              {%- else -%}
-                <strong>—</strong>
+            <li class="term-meta">
+              <strong>
+                {%- if p.semester -%}
+                  {{ p.semester }}
+                {%- elsif p.location -%}
+                  {{ p.location }}
+                {%- elsif p.date -%}
+                  {{ p.date | date: "%B %Y" }}
+                {%- else -%}
+                  —
+                {%- endif -%}
+              </strong>
+              {%- if p.evaluation -%}
+                &nbsp;·&nbsp; Evaluation: {{ p.evaluation }}
               {%- endif -%}
-              {%- if p.role -%} — Role: {{ p.role }}{%- endif -%}
-              {%- if p.evaluation -%} · Evaluation: {{ p.evaluation }}{%- endif -%}
-              {%- if p.location -%} · {{ p.location }}{%- endif -%}
+              {%- if p.location -%}
+                &nbsp;·&nbsp; {{ p.location }}
+              {%- endif -%}
+              {%- if p.evaluation_pdf -%}
+                &nbsp;·&nbsp; <a href="{{ p.evaluation_pdf | relative_url }}" target="_blank" rel="noopener">PDF</a>
+              {%- endif -%}
             </li>
           {%- endif -%}
         {%- endfor -%}
@@ -83,8 +159,7 @@ author_profile: true
         </div>
       {%- endif -%}
     </article>
-    <hr/>
+
+    <div class="divider"></div>
   {%- endfor -%}
 </section>
-
-
