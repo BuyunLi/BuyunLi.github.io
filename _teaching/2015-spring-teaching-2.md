@@ -9,5 +9,5 @@ semesters:
     location: "Ithaca, NY"
 ---
 Teaching assistant for the MBA class.
-======
+
 
