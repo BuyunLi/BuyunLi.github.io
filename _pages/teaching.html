@@ -109,7 +109,7 @@ author_profile: true
                   &nbsp;·&nbsp; {{ term.location | default: p.location }}
                 {%- endif -%}
                 {%- if term.evaluation_pdf -%}
-                  &nbsp;·&nbsp; <a href="{{ term.evaluation_pdf | relative_url }}" target="_blank" rel="noopener">course evaluation</a>
+                  &nbsp;·&nbsp; <a href="{{ term.evaluation_pdf | relative_url }}" target="_blank" rel="noopener">Course Evaluation Report</a>
                 {%- endif -%}
               </li>
             {%- endfor -%}
@@ -133,7 +133,7 @@ author_profile: true
                 &nbsp;·&nbsp; {{ p.location }}
               {%- endif -%}
               {%- if p.evaluation_pdf -%}
-                &nbsp;·&nbsp; <a href="{{ p.evaluation_pdf | relative_url }}" target="_blank" rel="noopener">course evaluation</a>
+                &nbsp;·&nbsp; <a href="{{ p.evaluation_pdf | relative_url }}" target="_blank" rel="noopener">Course Evaluation Report</a>
               {%- endif -%}
             </li>
           {%- endif -%}
