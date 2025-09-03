@@ -21,26 +21,22 @@ author_profile: true
 </style>
 
 {%- comment -%}
-  Group by stable course identifier if available.
-  Recommended front matter on each teaching file:
-    course_key: BUS-K303
-    course_role: Instructor                # optional, shown once per course
-    evaluation_pdf: /assets/evals/K303.pdf # optional, course-level PDF
+  Recommended front matter:
+    course_key: BUS-K303                 # stable key for grouping (else we use title)
+    course_role: Instructor              # shown once per course (optional)
+    evaluation_pdf: /assets/K303.pdf     # optional course-level evaluation link
 
   Option A (single file, many terms):
     semesters:
       - semester: "Fall 2023"
-        role: "Instructor"                 # optional; ignored for role line
-        evaluation: "6.9/7 overall…"
-        evaluation_pdf: /assets/evals/K303_F23.pdf  # optional, per-term PDF
+        evaluation: "7/7 overall…"
+        evaluation_pdf: /assets/K303_F23.pdf
         location: "Bloomington, IN"
-      - ...
 
   Option B (one file per term):
     semester: "Fall 2023"
-    role: "Instructor"                     # optional; auto-detected if no course_role
-    evaluation: "6.9/7 overall…"
-    evaluation_pdf: /assets/evals/K303_F23.pdf      # optional
+    evaluation: "7/7 overall…"
+    evaluation_pdf: /assets/K303_F23.pdf
     location: "Bloomington, IN"
 {%- endcomment -%}
 
@@ -52,10 +48,7 @@ author_profile: true
     {%- assign items_sorted = g.items | sort: "date" -%}
     {%- assign latest = items_sorted | last -%}
 
-    {%- comment -%}
-      Determine a single role to display once for the course.
-      Priority: course_role (explicit) -> first non-empty role found across terms/files.
-    {%- endcomment -%}
+    {%- comment -%} Determine single role shown once {%- endcomment -%}
     {%- assign course_role = latest.course_role -%}
     {%- if course_role == nil or course_role == "" -%}
       {%- for p in items_sorted -%}
@@ -64,17 +57,14 @@ author_profile: true
             {%- if t.role and t.role != "" -%}{%- assign course_role = t.role -%}{%- break -%}{%- endif -%}
           {%- endfor -%}
         {%- endif -%}
-        {%- if course_role == nil or course_role == "" -%}
-          {%- if p.role and p.role != "" -%}{%- assign course_role = p.role -%}{%- endif -%}
+        {%- if course_role == nil or course_role == "" and p.role and p.role != "" -%}
+          {%- assign course_role = p.role -%}
         {%- endif -%}
         {%- if course_role and course_role != "" -%}{%- break -%}{%- endif -%}
       {%- endfor -%}
     {%- endif -%}
 
-    {%- comment -%}
-      Course-level evaluation PDF (optional).
-      Priority: latest.evaluation_pdf -> first found across group.
-    {%- endcomment -%}
+    {%- comment -%} Course-level evaluation PDF (optional) {%- endcomment -%}
     {%- assign course_eval_pdf = latest.evaluation_pdf -%}
     {%- if course_eval_pdf == nil or course_eval_pdf == "" -%}
       {%- for p in items_sorted -%}
@@ -101,15 +91,12 @@ author_profile: true
           {%- endif -%}
           {%- if course_eval_pdf -%}
             {%- if course_role -%} &nbsp;·&nbsp; {%- endif -%}
-            <a href="{{ course_eval_pdf | relative_url }}" target="_blank" rel="noopener">Course evaluation (PDF)</a>
+            <a href="{{ course_eval_pdf | relative_url }}" target="_blank" rel="noopener">Course evaluation</a>
           {%- endif -%}
         </div>
       {%- endif -%}
 
       <ul class="teaching-terms">
-        {%- comment -%}
-          Render all terms (newest first). Per-term evaluation PDF (optional) appears inline.
-        {%- endcomment -%}
         {%- for p in items_sorted reversed -%}
           {%- if p.semesters -%}
             {%- for term in p.semesters -%}
@@ -122,7 +109,7 @@ author_profile: true
                   &nbsp;·&nbsp; {{ term.location | default: p.location }}
                 {%- endif -%}
                 {%- if term.evaluation_pdf -%}
-                  &nbsp;·&nbsp; <a href="{{ term.evaluation_pdf | relative_url }}" target="_blank" rel="noopener">PDF</a>
+                  &nbsp;·&nbsp; <a href="{{ term.evaluation_pdf | relative_url }}" target="_blank" rel="noopener">course evaluation</a>
                 {%- endif -%}
               </li>
             {%- endfor -%}
@@ -146,7 +133,7 @@ author_profile: true
                 &nbsp;·&nbsp; {{ p.location }}
               {%- endif -%}
               {%- if p.evaluation_pdf -%}
-                &nbsp;·&nbsp; <a href="{{ p.evaluation_pdf | relative_url }}" target="_blank" rel="noopener">PDF</a>
+                &nbsp;·&nbsp; <a href="{{ p.evaluation_pdf | relative_url }}" target="_blank" rel="noopener">course evaluation</a>
               {%- endif -%}
             </li>
           {%- endif -%}
