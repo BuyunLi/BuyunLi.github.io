@@ -76,6 +76,10 @@ layout: default
               {%- if post.pdf_link -%}
                 <a class="pub__link" href="{{ post.pdf_link }}" target="_blank" rel="noopener">📄 Preprint</a>
               {%- endif -%}
+
+              {%- if post.supplement_link -%}
+                <a class="pub__btn" href="{{ post.supplement_link }}" target="_blank" rel="noopener">🧾 Additional Supplement</a>
+              {%- endif -%}
             </div>
           </article>
         {%- endfor -%}
